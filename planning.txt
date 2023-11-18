@@ -1,0 +1,79 @@
+// Problem Solving and Brainstorming
+
+1. Understand The Problem
+I have to make a to do list to create a task based on the task details that being added dynamically. Every task has to be included in one or more categories based on the due date, priority or status (completed). 
+To create a task, first user have to set-up a project. The project will act like a box that contains all the task that have to be completed. User can add as many project and task as they want to the app
+User can easily manipulate and change the task that has been created, wether to delete or edit the task, and user can see the detail information about the task that has been created
+
+ExtraFeature (Not A Must)
+User can see sort the task based on the item details (By priority, Etc)
+Break into sub task?
+
+2. 
+- Does your program have a user interface? What will it look like?
+https://mooniidev.github.io/todo-list/#
+https://ccrsxx.github.io/to-do-list/
+https://todoist.com/
+https://culturedcode.com/things/
+
+Header : Title, Sidebar
+
+Title
+.App name
+.Home
+.Add To Do List?
+
+Sidebar
+.All
+.Today
+.Week
+.Important
+.Completed
+
+- What inputs will your program have?
+The program will have an input from the "user", where user will 
+1. Add a projects
+2. Add a task and the details into the selected projects 
+
+- What’s the desired output?
+The output is a list of task that has been added based on the task input where user can
+1. Delete a projects
+2. Delete a tasks
+3. Edit the projects / tasks
+
+- Given your inputs, what are the steps necessary to return the desired output?
+Using a dom to visualize the item that has been created
+
+3. PseudoCode
+
+When user  enter the app / web, user can create a new projects and tasks, the projects and task must be connected loosely with an object inheritance (Create a mini database using an object constructor / class / factory function)
+
+Adding a project
+- Create form to write the title 
+- Create a list of icons 
+- Create a button to cancel or add the projects
+Adding a todo item
+- Create form to write the title, description, due date, priority, subtask(not a must), projectloc
+- Create a button to cancel or add the todo item
+Add a note (not a must)
+- Create form to write the title and description
+
+Manipulate and edit
+- view all projects
+- view all todo item in each project (probably just the title and duedate… perhaps changing color for different priorities)
+- expand a single todo to see/edit its details
+- delete a todo
+
+ExtraLibrary : 
+1. CSS Resets (Done Using Modern-Normalize.CSS)
+2. Google Fonts (Done)
+3. Font Awesome icons (Done)
+4. Date-fns Library (Done)
+5. Webpack (Done)
+
+Js Modules And Function
+1. Display Dom (Display Off The Apps)
+2. Manipulation Dom (Dom interaction from user)
+3. Project (Project Manipulation)
+4. Task (Task Manipulation)
+5. Index (Connect Between All Import)

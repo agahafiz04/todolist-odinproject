@@ -1,0 +1,34 @@
+/* Import Modern CSS */
+@import "/node_modules/modern-normalize/modern-normalize.css";
+
+/* Import Font Awesome */
+@import "/node_modules/@fortawesome/fontawesome-free/css/fontawesome.css";
+@import "/node_modules/@fortawesome/fontawesome-free/css/brands.css";
+@import "/node_modules/@fortawesome/fontawesome-free/css/solid.css";
+@import "/node_modules/@fortawesome/fontawesome-free/css/regular.css";
+
+/* Import Google Fonts */
+/* comfortaa-300 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Comfortaa";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/comfortaa-v45-latin-300.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* comfortaa-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Comfortaa";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/comfortaa-v45-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* comfortaa-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Comfortaa";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/comfortaa-v45-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
