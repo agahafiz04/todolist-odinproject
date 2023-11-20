@@ -52,6 +52,7 @@ Adding a project
 - Create form to write the title 
 - Create a list of icons 
 - Create a button to cancel or add the projects
+
 Adding a todo item
 - Create form to write the title, description, due date, priority, subtask(not a must), projectloc
 - Create a button to cancel or add the todo item

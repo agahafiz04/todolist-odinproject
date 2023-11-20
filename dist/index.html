@@ -5,12 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script defer src="main.js"></script></head>
   <body>
+    <section class="modal hidden">
+      <h1>Hey yow Terri</h1>
+      <h1>Wassap Yow</h1>
+      <h3>Tes</h3>
+    </section>
+    <!-- <div class="overlay hidden"></div> -->
+
     <div class="main-container">
       <div class="header">
-        <h1>ToDo</h1>
+        <div class="sidebar-button">
+          <i class="fa-solid fa-bars fa-2xl"></i>
+        </div>
+        <div class="title">
+          <i class="fa-solid fa-clipboard-check fa-2xl"></i>
+          <h1>MyToDoList</h1>
+        </div>
+        <div class="theme">
+          <i class="fa-solid fa-toggle-on fa-2xl"></i>
+        </div>
       </div>
-      <div class="main"></div>
-      <div class="footer"></div>
+      <div class="main">
+        <div class="sidebar">
+          <div class="task-list">
+            <h1>Home</h1>
+            <ul>
+              <li data-categories="all" data-index="1">
+                <i class="fa-solid fa-cubes-stacked"></i>All Tasks
+              </li>
+              <li data-categories="today" data-index="2">
+                <i class="fa-solid fa-calendar-day"></i>Today
+              </li>
+              <li data-categories="week" data-index="3">
+                <i class="fa-solid fa-calendar-week"></i>Next 7 Days
+              </li>
+              <li data-categories="important" data-index="4">
+                <i class="fa-solid fa-star"></i>Important
+              </li>
+              <li data-categories="completed" data-index="5">
+                <i class="fa-solid fa-square-check"></i>Completed
+              </li>
+            </ul>
+          </div>
+          <div class="project-list">
+            <h1>Projects</h1>
+            <button class="add-project">
+              <i class="fa-solid fa-plus"></i>
+              Add Project
+            </button>
+            <ul></ul>
+          </div>
+        </div>
+        <div class="content"></div>
+      </div>
+      <div class="footer">
+        <h4>agahafiz04</h4>
+        <i class="fa-brands fa-github fa-lg"></i>
+      </div>
     </div>
   </body>
 </html>

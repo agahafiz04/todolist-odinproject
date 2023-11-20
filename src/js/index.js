@@ -1,4 +1,7 @@
 import "../css/style.css";
+import { domManipulation } from "./dom-manipulation";
+
+domManipulation;
 
 // function formatDate(date, format) {
 //   const map = {
@@ -13,30 +16,3 @@ import "../css/style.css";
 
 // const today = new Date();
 // console.log(formatDate(today, "mm/dd/yy"));
-
-const createTodoTask = (title, description, dueDate, priority, projectName) => {
-  const taskId = Date.now();
-  let isComplete = false;
-
-  return {
-    title,
-    description,
-    dueDate,
-    priority,
-    projectName,
-    taskId,
-    isComplete,
-  };
-};
-
-const taskOne = createTodoTask("Buy", "Buy an egg", "11/19/23", "High", "Null");
-console.log(taskOne);
-
-const createProject = (title, icons) => {
-  const projectId = Date.now();
-
-  return { title, icons, projectId };
-};
-
-const projectOne = createProject("Sunday Morning", "BitsyIcon");
-console.log(projectOne);
