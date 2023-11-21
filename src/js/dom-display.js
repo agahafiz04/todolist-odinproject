@@ -59,7 +59,101 @@ export const domDisplay = (function () {
   function renderSidebarProject() {}
 
   function renderModal() {
-    console.log("modal rendered");
+    const overlayEl = document.querySelector(".overlay");
+
+    function closeModal() {
+      console.log("hello");
+      overlayEl.classList.add("hidden");
+      const modalEl = document.querySelectorAll(".modal");
+      modalEl.forEach((modal) => {
+        modal.classList.add("hidden");
+      });
+    }
+
+    function changeContentModal(modalType) {
+      switch (modalType) {
+        case "project-modal-add":
+          projectModal("add");
+          break;
+
+        case "project-modal-edit":
+          projectModal("edit");
+          break;
+
+        case "task-modal-add":
+          taskModal("add");
+          break;
+
+        case "task-modal-edit":
+          taskModal("edit");
+          break;
+
+        case "task-modal-detail":
+          taskModal("detail");
+          break;
+
+        case "delete-modal-project":
+          deletePromptModal("project");
+          break;
+
+        case "delete-modal-task":
+          deletePromptModal("task");
+          break;
+
+        default:
+          break;
+      }
+
+      function projectModal(display) {
+        const modal = document.querySelector(".modal.project");
+        modal.classList.remove("hidden");
+        overlayEl.classList.remove("hidden");
+
+        const h1 = document.querySelector(".project .modal-header h1");
+        const projectModalButtonEl = document.querySelector(
+          ".project .button:nth-child(2)"
+        );
+
+        if (display == "add") {
+          h1.textContent = "New Project";
+          projectModalButtonEl.textContent = "Add";
+          projectModalButtonEl.className = "button add-modal";
+        } else if (display == "edit") {
+          h1.textContent = "Edit Project";
+          projectModalButtonEl.textContent = "Edit";
+          projectModalButtonEl.className = "button edit-modal";
+        }
+      }
+
+      function taskModal(display) {
+        // console.log(modal.childNodes[1].childNodes[1])
+        // Continue Here
+
+        const modal = document.querySelector(".modal.task");
+        modal.classList.remove("hidden");
+        overlayEl.classList.remove("hidden");
+
+        const h1 = document.querySelector(".task .modal-header h1");
+        const taskModalButtonEl = document.querySelector(
+          ".task .button:nth-child(2)"
+        );
+
+        if (display == "add") {
+          h1.textContent = "New Task";
+          taskModalButtonEl.textContent = "Add";
+          taskModalButtonEl.className = "button add-modal";
+        } else if (display == "edit") {
+          h1.textContent = "Edit Task";
+          taskModalButtonEl.textContent = "Edit";
+          taskModalButtonEl.className = "button edit-modal";
+        } else if (display == "detail") {
+        }
+      }
+
+      function deletePromptModal() {}
+    }
+
+    return { closeModal, changeContentModal };
   }
 
   return { renderSidebarProject, renderMainContent, renderModal };

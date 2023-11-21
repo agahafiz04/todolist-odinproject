@@ -58,7 +58,8 @@ export const domManipulation = (function () {
     });
   }
 
-  function sideBarTaskCategoriesEvent() {
+  function sideBarEvent() {
+    // Task Categories
     const listOption = document.querySelectorAll(".sidebar .task-list ul li");
     function removeAllSelected() {
       listOption.forEach((item) => {
@@ -76,18 +77,43 @@ export const domManipulation = (function () {
     });
   }
 
-  function sideBarProjectEvent() {
+  function modalEvent() {
+    // Open Modal Event
     const addProjectButton = document.querySelector(
       ".project-list .add-project"
     );
 
     addProjectButton.addEventListener("click", () => {
-      domDisplay.renderModal();
+      domDisplay.renderModal().changeContentModal("project-modal-add");
+    });
+
+    // Close Modal Event
+    const overlayEl = document.querySelector(".overlay");
+    const modalElAll = document.querySelectorAll(".modal");
+    const allCancelButtonEl = document.querySelectorAll(".button.cancel-modal");
+
+    allCancelButtonEl.forEach((cancelButton) => {
+      cancelButton.addEventListener("click", () => {
+        domDisplay.renderModal().closeModal();
+      });
+    });
+
+    overlayEl.addEventListener("click", () => {
+      domDisplay.renderModal().closeModal();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      modalElAll.forEach((modal) => {
+        console.log(modal);
+        if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+          domDisplay.renderModal().closeModal();
+        }
+      });
     });
   }
 
   sideBarOnChangeEvent();
   sideBarButtonEvent();
-  sideBarTaskCategoriesEvent();
-  sideBarProjectEvent();
+  sideBarEvent();
+  modalEvent();
 })();

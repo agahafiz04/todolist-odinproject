@@ -78,3 +78,9 @@ Js Modules And Function
 3. Project (Project Manipulation)
 4. Task (Task Manipulation)
 5. Index (Connect Between All Import)
+
+
+
+// Modal
+1. Detail Modal
+2. Javascript Manipulation

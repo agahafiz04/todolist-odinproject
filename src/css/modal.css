@@ -1,0 +1,258 @@
+/* Modal */
+.modal {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+  min-height: 100px;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  background-color: var(--color-2);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+
+  font-size: 1.2rem;
+}
+
+.modal > * {
+  padding: 0px 20px;
+}
+
+.modal-header {
+  width: 100%;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background-color: var(--color-4);
+  border-bottom: 1px solid white;
+}
+
+.modal-main ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-main ul li label,
+.modal-main ul li p {
+  display: block;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.modal-main ul li p {
+  margin-top: 0;
+  padding: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-main button {
+  cursor: pointer;
+  min-width: 100px;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+}
+
+.modal-main button:nth-child(1) {
+  background-color: rgba(255, 255, 255, 0.253);
+}
+
+.modal-main button:nth-child(1):hover {
+  background-color: black;
+}
+
+.modal-main button:nth-child(2) {
+  background-color: var(--color-4);
+}
+
+.modal-main button:nth-child(2):hover {
+  background-color: var(--color-5);
+}
+
+/* Modal Project */
+.modal.project {
+  font-size: 1.2rem;
+  min-width: 400px;
+}
+
+.modal.project .modal-main ul li:nth-child(2) .radio {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal.project .modal-main ul li input[type="text"] {
+  color: black;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  width: 100%;
+}
+
+.modal.project .modal-main ul li input[type="radio"] {
+  appearance: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  border: 2px solid white;
+  transition: 0.2s all linear;
+}
+
+.modal.project .modal-main ul li input[type="radio"]:nth-child(1) {
+  background: url("../images/book-solid.svg") no-repeat center;
+  background-size: 25px 25px;
+}
+
+.modal.project .modal-main ul li input[type="radio"]:nth-child(2) {
+  background: url("../images/briefcase-solid.svg") no-repeat center;
+  background-size: 25px 25px;
+}
+
+.modal.project .modal-main ul li input[type="radio"]:nth-child(3) {
+  background: url("../images/dumbbell-solid.svg") no-repeat center;
+  background-size: 25px 25px;
+}
+
+.modal.project .modal-main ul li input[type="radio"]:nth-child(4) {
+  background: url("../images/gamepad-solid.svg") no-repeat center;
+  background-size: 25px 25px;
+}
+
+.modal.project .modal-main ul li input[type="radio"]:nth-child(5) {
+  background: url("../images/hands-praying-solid.svg") no-repeat center;
+  background-size: 25px 25px;
+}
+
+.modal.project .modal-main ul li input[type="radio"]:nth-child(6) {
+  background: url("../images/plane-solid.svg") no-repeat center;
+  background-size: 25px 25px;
+}
+
+.modal.project .modal-main ul li input[type="radio"]:checked {
+  border: 2px solid white;
+  background-color: var(--color-3);
+}
+
+.modal.project .modal-main ul li:last-child {
+  border-top: 1px solid white;
+  padding-top: 20px;
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+}
+
+/* Modal Task */
+.modal.task .modal-main {
+  font-size: 1.1rem;
+  min-width: 800px;
+}
+
+.modal.task .modal-main ul li > *:not(label),
+.modal.task .modal-main div.one ul li select option {
+  color: black;
+}
+
+.modal.task .modal-main div.one ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 15px;
+}
+
+.modal.task .modal-main div.one ul li:nth-child(2) {
+  grid-row: 2;
+}
+
+.modal.task .modal-main div.one ul li:nth-child(3) {
+  grid-row: 3;
+}
+
+.modal.task .modal-main div.one ul li input,
+.modal.task .modal-main div.one ul li textarea,
+.modal.task .modal-main div.one ul li select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: white;
+}
+
+.modal.task .modal-main div.one ul li textarea {
+  resize: none;
+}
+
+.modal.task .modal-main div.one ul li select {
+  padding: 7px;
+  cursor: pointer;
+}
+
+.modal.task .modal-main div:last-child {
+  border-top: 1px solid white;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 10px;
+}
+
+/* Modal Task */
+.modal.prompt .modal-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 300px;
+  min-width: 500px;
+  align-items: center;
+}
+
+.modal.prompt .modal-main h1 {
+  margin: 5px;
+}
+
+.modal.prompt .modal-main i {
+  margin: 10px 0px;
+}
+
+.modal.prompt .modal-main ul {
+  gap: 9px;
+}
+
+.modal.prompt .modal-main ul li {
+  text-align: center;
+  line-height: 45px;
+}
+
+.modal.prompt .modal-main ul li:last-child {
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal.prompt .modal-main ul li:last-child button {
+  text-transform: uppercase;
+  width: 200px;
+  padding: 10px 40px;
+}

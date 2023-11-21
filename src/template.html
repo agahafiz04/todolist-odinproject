@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <section class="modal hidden">
-      <h1>Hey yow Terri</h1>
-      <h1>Wassap Yow</h1>
-      <h3>Tes</h3>
-    </section>
-    <!-- <div class="overlay hidden"></div> -->
-
     <div class="main-container">
       <div class="header">
         <div class="sidebar-button">
@@ -63,5 +56,114 @@
         <i class="fa-brands fa-github fa-lg"></i>
       </div>
     </div>
+    <section class="modal project hidden">
+      <div class="modal-header">
+        <h1>New Project</h1>
+      </div>
+      <div class="modal-main">
+        <ul>
+          <li>
+            <label for="title">Project Name</label>
+            <input type="text" name="title" id="title" />
+          </li>
+          <li>
+            <p>Icon</p>
+            <div class="radio">
+              <input type="radio" name="project-icon" id="work" value="work" />
+              <input
+                type="radio"
+                name="project-icon"
+                id="workout"
+                value="workout"
+              />
+              <input type="radio" name="project-icon" id="pray" value="pray" />
+              <input
+                type="radio"
+                name="project-icon"
+                id="study"
+                value="study"
+              />
+              <input
+                type="radio"
+                name="project-icon"
+                id="travel"
+                value="travel"
+              />
+              <input
+                type="radio"
+                name="project-icon"
+                id="gaming"
+                value="gaming"
+              />
+            </div>
+          </li>
+          <li>
+            <button class="button cancel-modal">Cancel</button>
+            <button class="button add-modal">Add</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="modal task hidden">
+      <div class="modal-header">
+        <h1>New Task</h1>
+      </div>
+      <div class="modal-main">
+        <div class="one">
+          <ul>
+            <li>
+              <label for="title">Task Name</label>
+              <input type="text" name="title" id="title" />
+            </li>
+            <li>
+              <label for="description">Description</label>
+              <textarea
+                name="description"
+                id="description"
+                cols="30"
+                rows="5"
+              ></textarea>
+            </li>
+            <li>
+              <label for="date">Due Date</label>
+              <input type="date" name="due-date" id="due-date" />
+            </li>
+            <li>
+              <label for="priority">Priority</label>
+              <select name="priority" id="priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </li>
+            <li>
+              <label for="project">Project</label>
+              <select name="project" id="project">
+                <option disabled selected value>-- select an option --</option>
+              </select>
+            </li>
+          </ul>
+        </div>
+        <div class="two">
+          <button class="button cancel-modal">Cancel</button>
+          <button class="button add-modal">Add</button>
+        </div>
+      </div>
+    </section>
+    <section class="modal prompt">
+      <div class="modal-main">
+        <ul>
+          <li>
+            <i class="fa-solid fa-circle-exclamation fa-beat fa-5x"></i>
+            <h3>Are you sure that you want to delete this ....?</h3>
+          </li>
+          <li>
+            <button class="button cancel-modal">Cancel</button>
+            <button class="button delete-modal">Ok</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <div class="overlay"></div>
   </body>
 </html>
