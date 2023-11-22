@@ -1,3 +1,9 @@
+/* All */
+.sidebar .task-list,
+.sidebar .project-list {
+  width: 90%;
+}
+
 /* Header */
 
 .header {
@@ -29,7 +35,7 @@
   transition: 0.3s;
 }
 
-.sidebar-button.selected {
+.sidebar-button.currently-selected {
   background-color: var(--color-2);
   transition: 0.3s;
 }
@@ -58,17 +64,48 @@
   margin-right: 10px;
 }
 
+.main .content .display-description {
+  width: 100%;
+  text-align: center;
+}
+
+.main .content .display-description button.add-task {
+  width: 100%;
+  text-align: left;
+  padding: 20px;
+  cursor: pointer;
+  background-color: var(--color-3);
+  border: none;
+  font-weight: bolder;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+.main .content .display-description button:hover {
+  background-color: var(--color-4);
+}
+
+.main .content .display-description button.add-task i {
+  margin-right: 15px;
+}
+
+/* Sidebar */
+
 .main .sidebar {
   position: fixed;
   z-index: 5;
   background-color: var(--color-3);
   width: 0px;
-  height: calc(100% - 125px);
+  height: calc(100% - 105px);
   padding-top: 5px;
   overflow-x: hidden;
   overflow-y: auto;
 
   transition: 0.3s;
+}
+
+.sidebar ul li i {
+  width: 20px;
 }
 
 .sidebar > div {
@@ -86,7 +123,7 @@
 .sidebar > div ul li {
   margin-bottom: 16px;
   background-color: var(--color-2);
-  padding: 16px;
+  padding: 15px;
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
@@ -97,7 +134,7 @@
   background-color: var(--color-1);
 }
 
-.sidebar > div ul li.selected {
+.sidebar > div ul li.currently-selected {
   background-color: var(--color-4);
   transition: 0.3s;
 }
@@ -109,8 +146,7 @@
 }
 
 .sidebar > div h1 {
-  font-size: 1.6rem;
-  margin-bottom: 30px;
+  font-size: 1.2rem;
   margin-top: 30px;
   padding-bottom: 15px;
   border-bottom: 2px solid white;
@@ -118,22 +154,18 @@
 
 /* Sidebar Task */
 
-/* .sidebar .task-list {
-  } */
+.sidebar .task-list h1 {
+  margin-top: 20px;
+}
 
 /* Sidebar Project */
-
-/* .sidebar .project-list {
-  
-  } */
-
 .sidebar .project-list button.add-project {
   text-align: left;
   width: 100%;
-  padding: 16px;
+  padding: 15px;
   border-radius: 5px;
   border: none;
-  background-color: transparent;
+  background-color: var(--color-3);
   cursor: pointer;
 }
 
@@ -149,15 +181,42 @@
   margin-right: 10px;
 }
 
+.sidebar .project-list ul li {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.sidebar .project-list ul li > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.sidebar .project-list ul li div:nth-child(2) {
+  gap: 5px;
+}
+
+.sidebar .project-list ul li div:nth-child(2) button {
+  cursor: crosshair;
+  background-color: var(--color-2);
+  border: none;
+  border-radius: 5px;
+
+  height: 30px;
+}
+
 /* Sidebar Toggle */
 
 .sidebar.toggle-bar {
-  width: 350px;
+  width: 400px;
   transition: 0.3s;
 }
 
 .content.toggle-content {
-  margin-left: 350px;
+  margin-left: 400px;
   transition: 0.3s;
 }
 

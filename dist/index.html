@@ -23,20 +23,25 @@
           <div class="task-list">
             <h1>Home</h1>
             <ul>
-              <li data-categories="all" data-index="1">
-                <i class="fa-solid fa-cubes-stacked"></i>All Tasks
+              <li data-categories="all">
+                <i class="fa-solid fa-cubes-stacked"></i>
+                <p>All Tasks</p>
               </li>
-              <li data-categories="today" data-index="2">
-                <i class="fa-solid fa-calendar-day"></i>Today
+              <li data-categories="today">
+                <i class="fa-solid fa-calendar-day"></i>
+                <p>Today</p>
               </li>
-              <li data-categories="week" data-index="3">
-                <i class="fa-solid fa-calendar-week"></i>Next 7 Days
+              <li data-categories="week">
+                <i class="fa-solid fa-calendar-week"></i>
+                <p>Next 7 Days</p>
               </li>
-              <li data-categories="important" data-index="4">
-                <i class="fa-solid fa-star"></i>Important
+              <li data-categories="important">
+                <i class="fa-solid fa-star"></i>
+                <p>Important</p>
               </li>
-              <li data-categories="completed" data-index="5">
-                <i class="fa-solid fa-square-check"></i>Completed
+              <li data-categories="completed">
+                <i class="fa-solid fa-square-check"></i>
+                <p>Completed</p>
               </li>
             </ul>
           </div>
@@ -63,13 +68,19 @@
       <div class="modal-main">
         <ul>
           <li>
-            <label for="title">Project Name</label>
-            <input type="text" name="title" id="title" />
+            <label for="title-project">Project Name</label>
+            <input type="text" name="title-project" id="title-project" />
           </li>
           <li>
             <p>Icon</p>
             <div class="radio">
-              <input type="radio" name="project-icon" id="work" value="work" />
+              <input
+                type="radio"
+                name="project-icon"
+                id="work"
+                value="work"
+                checked="checked"
+              />
               <input
                 type="radio"
                 name="project-icon"
@@ -112,8 +123,8 @@
         <div class="one">
           <ul>
             <li>
-              <label for="title">Task Name</label>
-              <input type="text" name="title" id="title" />
+              <label for="title-task">Task Name</label>
+              <input type="text" name="title-task" id="title-task" />
             </li>
             <li>
               <label for="description">Description</label>
@@ -125,7 +136,7 @@
               ></textarea>
             </li>
             <li>
-              <label for="date">Due Date</label>
+              <label for="due-date">Due Date</label>
               <input type="date" name="due-date" id="due-date" />
             </li>
             <li>
@@ -150,7 +161,41 @@
         </div>
       </div>
     </section>
-    <section class="modal prompt">
+    <section class="modal detail hidden">
+      <div class="modal-header">
+        <h1>Details</h1>
+      </div>
+      <div class="modal-main">
+        <div class="one">
+          <ul>
+            <li>
+              <h3>Task Name</h3>
+              <p>Buy an egg at the supermarket</p>
+            </li>
+            <li>
+              <h3>Description</h3>
+              <p>Buy 10Kg</p>
+            </li>
+            <li>
+              <h3>Due Date</h3>
+              <p>10/12/23 / October-12-2023</p>
+            </li>
+            <li>
+              <h3>Priority</h3>
+              <p>High</p>
+            </li>
+            <li>
+              <h3>Project</h3>
+              <p>Usually</p>
+            </li>
+          </ul>
+        </div>
+        <div class="two">
+          <button class="button cancel-modal">Cancel</button>
+        </div>
+      </div>
+    </section>
+    <section class="modal prompt hidden">
       <div class="modal-main">
         <ul>
           <li>
@@ -164,6 +209,19 @@
         </ul>
       </div>
     </section>
-    <div class="overlay"></div>
+    <section class="modal invalid hidden">
+      <div class="modal-main">
+        <ul>
+          <li>
+            <i class="fa-solid fa-circle-exclamation fa-beat fa-5x"></i>
+            <h3>Please insert all of the form correctly</h3>
+          </li>
+          <li>
+            <button class="button cancel-invalid-modal">Ok</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <div class="overlay hidden"></div>
   </body>
 </html>

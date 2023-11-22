@@ -1,15 +1,25 @@
-const createProject = (title, icon) => {
-  const projectId = Date.now();
+export const project = (function () {
+  const projectList = [];
 
-  return { title, icon, projectId };
-};
+  const createProject = (title, icon) => {
+    const projectId = Date.now();
 
-const updateProject = (title, icon) => {
-  taskObj.title = title;
-  taskObj.icon = icon;
-};
+    return { title, icon, projectId };
+  };
 
-const deleteProject = () => {};
+  const updateProject = (title, icon) => {
+    taskObj.title = title;
+    taskObj.icon = icon;
+  };
 
-const projectOne = createProject("Sunday Morning", "BitsyIcon");
-console.log(projectOne);
+  const deleteProject = () => {};
+
+  const projectOne = createProject("Sunday Morning", "work");
+  const projectTwo = createProject("All Righty", "workout");
+  const projectThree = createProject("NiceBrow", "study");
+  projectList.push(projectOne, projectTwo, projectThree);
+
+  console.log(projectList);
+
+  return { projectList, createProject, updateProject };
+})();

@@ -1,7 +1,15 @@
 import { domDisplay } from "./dom-display";
-domDisplay;
+import { project } from "./project";
 
 export const domManipulation = (function () {
+  (function () {
+    sideBarOnChangeEvent();
+    toggleSideBarEvent();
+    sideBarEvent();
+    toggleModalEvent();
+    modalEvent();
+  })();
+
   function sideBarOnChangeEvent() {
     const sidebarButton = document.querySelector(".sidebar-button");
     sidebarButton.addEventListener("click", toggleNav);
@@ -47,7 +55,7 @@ export const domManipulation = (function () {
     };
   }
 
-  function sideBarButtonEvent() {
+  function toggleSideBarEvent() {
     const listButton = document.querySelector(".sidebar-button");
     listButton.addEventListener("click", () => {
       if (listButton.classList.contains("selected")) {
@@ -59,35 +67,67 @@ export const domManipulation = (function () {
   }
 
   function sideBarEvent() {
-    // Task Categories
-    const listOption = document.querySelectorAll(".sidebar .task-list ul li");
     function removeAllSelected() {
-      listOption.forEach((item) => {
-        item.classList.remove("selected");
+      categoriesListOption.forEach((item) => {
+        item.classList.remove("currently-selected");
+      });
+      projectListOption.forEach((item) => {
+        item.classList.remove("currently-selected");
       });
     }
 
-    listOption.forEach((item) => {
-      item.addEventListener("click", () => {
-        console.log("yow");
+    // Task Categories
+    const categoriesListOption = document.querySelectorAll(
+      ".sidebar .task-list ul li"
+    );
+
+    categoriesListOption.forEach((categories) => {
+      categories.addEventListener("click", () => {
         removeAllSelected();
-        item.classList.add("selected");
-        domDisplay.renderMainContent(item.dataset.categories);
+        categories.classList.add("currently-selected");
+        domDisplay.renderMainContent("task");
+      });
+    });
+
+    // Project Categories
+    const projectListOption = document.querySelectorAll(
+      ".sidebar .project-list ul li"
+    );
+
+    projectListOption.forEach((project) => {
+      project.addEventListener("click", () => {
+        removeAllSelected();
+        project.classList.add("currently-selected");
+        domDisplay.renderMainContent("project");
       });
     });
   }
 
-  function modalEvent() {
-    // Open Modal Event
-    const addProjectButton = document.querySelector(
-      ".project-list .add-project"
-    );
+  function toggleModalEvent() {
+    // Toggle Project Modal
+    const addProjectButton = document.querySelector("button.add-project");
 
     addProjectButton.addEventListener("click", () => {
       domDisplay.renderModal().changeContentModal("project-modal-add");
     });
 
-    // Close Modal Event
+    const editProjectButton = document.querySelectorAll("button.edit-project");
+
+    editProjectButton.forEach((editButton) => {
+      editButton.addEventListener("click", () => {
+        console.log(project.projectList);
+        domDisplay.renderModal().changeContentModal("project-modal-edit");
+      });
+    });
+
+    // Toggle Task Modal
+    const addTaskButton = document.querySelector("button.add-task");
+
+    addTaskButton.addEventListener("click", () => {
+      domDisplay.renderModal().changeContentModal("task-modal-add");
+    });
+
+    // Toggle Close Modal
     const overlayEl = document.querySelector(".overlay");
     const modalElAll = document.querySelectorAll(".modal");
     const allCancelButtonEl = document.querySelectorAll(".button.cancel-modal");
@@ -98,22 +138,68 @@ export const domManipulation = (function () {
       });
     });
 
+    const invalidModalButton = document.querySelector(
+      ".button.cancel-invalid-modal"
+    );
+    invalidModalButton.addEventListener("click", () => {
+      domDisplay.renderModal().closeModal("invalid");
+    });
+
     overlayEl.addEventListener("click", () => {
-      domDisplay.renderModal().closeModal();
+      if (overlayEl.classList.contains("invalid")) {
+        domDisplay.renderModal().closeModal("invalid");
+      } else {
+        domDisplay.renderModal().closeModal();
+      }
     });
 
     document.addEventListener("keydown", function (e) {
       modalElAll.forEach((modal) => {
-        console.log(modal);
         if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-          domDisplay.renderModal().closeModal();
+          if (overlayEl.classList.contains("invalid")) {
+            domDisplay.renderModal().closeModal("invalid");
+          } else {
+            domDisplay.renderModal().closeModal();
+          }
         }
       });
     });
   }
 
-  sideBarOnChangeEvent();
-  sideBarButtonEvent();
-  sideBarEvent();
-  modalEvent();
+  function modalEvent() {
+    const modalProject = document.querySelectorAll(
+      ".modal.project .modal-main ul li"
+    );
+
+    const input = modalProject[0].children[1];
+    const radioDiv = modalProject[1].children[1];
+
+    const modalProjectAddButton = document.querySelector(
+      ".modal.project .modal-main ul li .add-modal"
+    );
+    modalProjectAddButton.addEventListener("click", (event) => {
+      let icon;
+
+      radioDiv.childNodes.forEach((checkedRadioButton) => {
+        if (checkedRadioButton.checked) {
+          icon = checkedRadioButton.value;
+          console.log(icon);
+        }
+      });
+
+      if (input.value === "" || input.value.length > 15) {
+        event.preventDefault();
+        domDisplay.renderModal().changeContentModal("invalid-modal");
+      } else {
+        const projectCreated = project.createProject(
+          `${input.value}`,
+          `${icon}`
+        );
+
+        project.projectList.push(projectCreated);
+        domDisplay.renderSidebarProject();
+        domDisplay.renderModal().closeModal();
+      }
+    });
+  }
 })();

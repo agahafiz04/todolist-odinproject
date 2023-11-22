@@ -1,7 +1,8 @@
 import "../css/style.css";
 import { domManipulation } from "./dom-manipulation";
-
-domManipulation;
+import { domDisplay } from "./dom-display";
+import { project } from "./project";
+import { task } from "./task";
 
 // function formatDate(date, format) {
 //   const map = {

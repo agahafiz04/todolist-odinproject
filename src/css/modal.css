@@ -28,6 +28,10 @@
   font-size: 1.2rem;
 }
 
+.overlay.invalid {
+  z-index: 15;
+}
+
 .modal > * {
   padding: 0px 20px;
 }
@@ -61,7 +65,7 @@
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .modal-main button {
@@ -117,32 +121,32 @@
   transition: 0.2s all linear;
 }
 
-.modal.project .modal-main ul li input[type="radio"]:nth-child(1) {
+.modal.project .modal-main ul li input[type="radio"][id="study"] {
   background: url("../images/book-solid.svg") no-repeat center;
   background-size: 25px 25px;
 }
 
-.modal.project .modal-main ul li input[type="radio"]:nth-child(2) {
+.modal.project .modal-main ul li input[type="radio"][id="work"] {
   background: url("../images/briefcase-solid.svg") no-repeat center;
   background-size: 25px 25px;
 }
 
-.modal.project .modal-main ul li input[type="radio"]:nth-child(3) {
+.modal.project .modal-main ul li input[type="radio"][id="workout"] {
   background: url("../images/dumbbell-solid.svg") no-repeat center;
   background-size: 25px 25px;
 }
 
-.modal.project .modal-main ul li input[type="radio"]:nth-child(4) {
+.modal.project .modal-main ul li input[type="radio"][id="gaming"] {
   background: url("../images/gamepad-solid.svg") no-repeat center;
   background-size: 25px 25px;
 }
 
-.modal.project .modal-main ul li input[type="radio"]:nth-child(5) {
+.modal.project .modal-main ul li input[type="radio"][id="pray"] {
   background: url("../images/hands-praying-solid.svg") no-repeat center;
   background-size: 25px 25px;
 }
 
-.modal.project .modal-main ul li input[type="radio"]:nth-child(6) {
+.modal.project .modal-main ul li input[type="radio"][id="travel"] {
   background: url("../images/plane-solid.svg") no-repeat center;
   background-size: 25px 25px;
 }
@@ -215,7 +219,7 @@
   gap: 10px;
 }
 
-/* Modal Task */
+/* Modal Prompt */
 .modal.prompt .modal-main {
   display: flex;
   align-items: center;
@@ -224,6 +228,8 @@
   min-height: 300px;
   min-width: 500px;
   align-items: center;
+
+  background-color: var(--color-5);
 }
 
 .modal.prompt .modal-main h1 {
@@ -255,4 +261,51 @@
   text-transform: uppercase;
   width: 200px;
   padding: 10px 40px;
+}
+
+/* Modal Details */
+.modal.detail .modal-main {
+  min-width: 400px;
+  max-width: 600px;
+}
+
+.modal.detail .modal-main ul {
+  gap: 20px;
+}
+
+.modal.detail .modal-main ul li {
+  border-bottom: 1px solid white;
+}
+
+.modal.detail .modal-main ul li:nth-child(2) {
+  padding-bottom: 30px;
+  overflow-y: auto;
+}
+
+.modal.detail .modal-main ul li h3 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.modal.detail .modal-main div:last-child {
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Modal Invalid */
+.modal.invalid {
+  min-width: 400px;
+  min-height: 250px;
+  text-align: center;
+  background-color: var(--color-4);
+  display: flex;
+  justify-content: center;
+  z-index: 20;
+}
+
+.modal.invalid ul {
+  gap: 10px;
 }

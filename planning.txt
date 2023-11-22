@@ -80,7 +80,14 @@ Js Modules And Function
 5. Index (Connect Between All Import)
 
 
-
 // Modal
-1. Detail Modal
+1. Detail Modal (Done)
 2. Javascript Manipulation
+
+Icon List
+<i class="fa-solid fa-briefcase"></i>
+<i class="fa-solid fa-dumbbell"></i>
+<i class="fa-solid fa-hands-praying"></i> / <i class="fa-solid fa-person-praying"></i>
+<i class="fa-solid fa-book"></i>
+<i class="fa-solid fa-plane"></i>
+<i class="fa-solid fa-gamepad"></i>
