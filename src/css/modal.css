@@ -92,6 +92,14 @@
   background-color: var(--color-5);
 }
 
+.modal-main button:nth-child(3) {
+  background-color: var(--color-5);
+}
+
+.modal-main button:nth-child(3):hover {
+  background-color: var(--color-1);
+}
+
 /* Modal Project */
 .modal.project {
   font-size: 1.2rem;
@@ -167,7 +175,7 @@
 /* Modal Task */
 .modal.task .modal-main {
   font-size: 1.1rem;
-  min-width: 800px;
+  min-width: 350px;
 }
 
 .modal.task .modal-main ul li > *:not(label),
@@ -177,7 +185,7 @@
 
 .modal.task .modal-main div.one ul {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   gap: 15px;
 }

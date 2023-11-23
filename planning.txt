@@ -91,3 +91,6 @@ Icon List
 <i class="fa-solid fa-book"></i>
 <i class="fa-solid fa-plane"></i>
 <i class="fa-solid fa-gamepad"></i>
+
+Tomorrow
+- Continue to fix bug of the modal and project
