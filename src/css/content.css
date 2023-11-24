@@ -35,7 +35,7 @@
   transition: 0.3s;
 }
 
-.sidebar-button.currently-selected {
+.sidebar-button.selected {
   background-color: var(--color-2);
   transition: 0.3s;
 }
@@ -64,12 +64,14 @@
   margin-right: 10px;
 }
 
-.main .content .display-description {
+.main .content .task-container {
   width: 100%;
   text-align: center;
+  list-style: none;
+  padding-left: 0px;
 }
 
-.main .content .display-description button.add-task {
+.main .content button.add-task {
   width: 100%;
   text-align: left;
   padding: 20px;
@@ -81,12 +83,23 @@
   margin-top: 10px;
 }
 
-.main .content .display-description button:hover {
+.main .content button:hover {
   background-color: var(--color-4);
 }
 
-.main .content .display-description button.add-task i {
+.main .content button.add-task i {
   margin-right: 15px;
+}
+
+.main .content .task-container li {
+  background-color: var(--color-4);
+  border: none;
+  font-weight: bolder;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 20px;
 }
 
 /* Sidebar */

@@ -1,16 +1,18 @@
+import { add, sub } from "date-fns";
 import "../css/style.css";
 import { domDisplay } from "./dom-display";
-import { domManipulation } from "./dom-manipulation";
+import { domManipulation } from "./domManipulation";
 import { project } from "./project";
 import { task } from "./task";
 
-task;
 project;
-domManipulation;
+task;
 domDisplay;
+domManipulation;
 
 export let pubSubConnection = {
   currentId: "null",
+  currentContent: "null",
 
   filterObjectShuffle() {
     let filterObject = project.projectList.find(
@@ -21,25 +23,13 @@ export let pubSubConnection = {
   },
 };
 
-// Initial rendering display
-(function () {
-  domDisplay.initialRenderContent();
-  domDisplay.renderSidebarProject();
-})();
-
-// Initial all dom event manipulation function
-(function () {
-  domManipulation.sideBarOnChangeEvent();
-  domManipulation.toggleSideBar();
-  domManipulation.sideListEvent().sideListTaskEvent();
-  domManipulation.sideListEvent().sideListProjectEvent();
-  domManipulation.toggleModal().toggleTaskModal();
-  domManipulation.toggleModal().toggleProjectModal();
-  domManipulation.toggleModal().toggleCloseModal();
-  // domManipulation.toggleModal().toggleDeleteModal();
-  domManipulation.modalEvent().projectModalEvent();
-  // domManipulation.modalEvent().taskModalEvent();
-})();
+const currentDate = Date.now();
+const maximumDate = add(currentDate, {
+  years: 5,
+});
+const minimumDate = sub(currentDate, {
+  years: 2,
+});
 
 // let filterObject = project.projectList.find(
 //   (item) => item.projectId === pubSubConnection.currentId

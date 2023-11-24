@@ -1,24 +1,19 @@
-export const task = (function () {
-  // const taskArray = [];
+import { v4 as uuidv4 } from "uuid";
 
-  const createTodoTask = (
-    title,
-    description,
-    dueDate,
-    priority,
-    projectName
-  ) => {
-    const taskId = Date.now();
+export const task = (function () {
+  const createTodoTask = (title, description, dueDate, priority) => {
+    const taskId = uuidv4().slice(0, 8);
     let isComplete = false;
+    let projectName = null;
 
     return {
       title,
       description,
       dueDate,
       priority,
-      projectName,
       taskId,
       isComplete,
+      projectName,
     };
   };
 
@@ -48,4 +43,6 @@ export const task = (function () {
     "High",
     "Null"
   );
+
+  return { createTodoTask, updateTodoTask, deleteTask };
 })();

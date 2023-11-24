@@ -2,93 +2,32 @@ import { pubSubConnection } from ".";
 import { project } from "./project";
 
 export const domDisplay = (function () {
+  (function init() {
+    initialRenderContent();
+    renderSidebarProject();
+  })();
+
   // Initial rendering content (Not used in any other function, only for initialization)
   function initialRenderContent() {
     const createDisplayTitle = document.createElement("h1");
-    const createDisplayDescription = document.createElement("div");
-    const emptyText = document.createElement("h3");
-
     createDisplayTitle.classList.add("display-title");
-    createDisplayDescription.classList.add("display-description");
     createDisplayTitle.textContent = `What To Do Today?`;
-    emptyText.textContent = `Please Select The Sidebar Menu On The Left`;
 
-    const contentEl = document.querySelector(".main .content");
-    contentEl.append(createDisplayTitle, createDisplayDescription);
+    const createTaskListContainer = document.createElement("ul");
+    createTaskListContainer.classList.add("task-container");
+
     const addTaskButton = document.createElement("button");
-
     addTaskButton.className = "add-task hidden";
     addTaskButton.innerHTML = `<i class="fa-solid fa-circle-plus fa-bounce fa-xl"></i>Add New Task`;
-    createDisplayDescription.append(addTaskButton);
-    createDisplayDescription.append(emptyText);
-  }
 
-  // Render the main content based on the call of dom-manipulation
-  function renderMainContent(content) {
-    const currentDisplayTitle = document.querySelector(".display-title");
-    const currentDisplayDescription = document.querySelector(
-      ".display-description"
+    const contentEl = document.querySelector(".main .content");
+    contentEl.append(
+      createDisplayTitle,
+      addTaskButton,
+      createTaskListContainer
     );
-    const currentlySelected = document.querySelector(".currently-selected");
-    const addTaskButton = document.querySelector("button.add-task");
-    // Main content will change based on the content that were called
-    switch (content) {
-      case "task":
-        const taskIconCurrentlySelected = currentlySelected.children[0];
-        const taskParaCurrentlySelected = currentlySelected.children[1];
-        currentDisplayTitle.innerHTML = `<i class="${taskIconCurrentlySelected.className}"></i>${taskParaCurrentlySelected.textContent}`;
-        currentDisplayDescription.children[1].textContent = "This is Content";
-        addTaskButton.classList.add("hidden");
-        break;
-
-      case "project":
-        let filterObject = pubSubConnection.filterObjectShuffle();
-        let iconChanger = null;
-
-        if (filterObject) {
-          switch (filterObject.icon) {
-            case "work":
-              iconChanger = `fa-solid fa-briefcase`;
-              break;
-            case "workout":
-              iconChanger = `fa-solid fa-dumbbell`;
-              break;
-            case "pray":
-              iconChanger = `fa-solid fa-hands-praying`;
-              break;
-            case "study":
-              iconChanger = `fa-solid fa-book`;
-              break;
-            case "travel":
-              iconChanger = `fa-solid fa-plane`;
-              break;
-            case "gaming":
-              iconChanger = `fa-solid fa-gamepad`;
-              break;
-            default:
-              break;
-          }
-        }
-
-        currentDisplayTitle.innerHTML = `<i class="${iconChanger}"></i>${filterObject.title}`;
-        currentDisplayDescription.children[1].textContent =
-          "Currently There Is No Task";
-        addTaskButton.classList.remove("hidden");
-
-        console.log();
-
-        break;
-
-      case "default":
-        currentDisplayTitle.textContent = "What To Do Today?";
-        currentDisplayDescription.children[1].textContent =
-          "Please Select The Sidebar Menu On The Left";
-        addTaskButton.classList.add("hidden");
-
-      default:
-        break;
-    }
   }
+
   // Render the sidebar project list
   function renderSidebarProject() {
     const projectListUl = document.querySelector(".project-list ul");
@@ -121,92 +60,149 @@ export const domDisplay = (function () {
         default:
           break;
       }
+
+      //
       const createLi = document.createElement("li");
-      const createEditButton = document.createElement("button");
-      const createDeleteButton = document.createElement("button");
-      const createDiv = document.createElement("div");
-      createEditButton.classList.add("edit-project");
-      createDeleteButton.classList.add("delete-project");
-      createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
-      createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
       createLi.innerHTML = `<div>${iconChanger} <p>${project.title}</p></div>`;
+      //
+      const createEditButton = document.createElement("button");
+      createEditButton.classList.add("edit-project");
+      createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+      //
+      const createDeleteButton = document.createElement("button");
+      createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+      createDeleteButton.classList.add("delete-project");
+      //
+      const createDiv = document.createElement("div");
+      //
       createLi.append(createDiv);
       createDiv.append(createEditButton, createDeleteButton);
       projectListUl.append(createLi);
+      //
       createLi.id = `${project.projectId}`;
     });
   }
-  // Render the modal based on the calling context from dom-manipulation
-  function renderModal() {
-    const overlayEl = document.querySelector(".overlay");
-    // open and change content modal
-    function openModal(openModal) {
-      switch (openModal) {
-        case "project-modal-add":
-          changeContentModal().projectModal("add");
-          console.log("1");
-          break;
-        case "project-modal-edit":
-          changeContentModal().projectModal("edit");
-          console.log("2");
-          break;
-        case "project-modal-delete":
-          changeContentModal().deleteModal("project");
-          console.log("3");
-          break;
-        case "task-modal-add":
-          changeContentModal().taskModal("add");
-          console.log("4");
-          break;
-        case "task-modal-edit":
-          changeContentModal().taskModal("edit");
-          console.log("5");
-          break;
-        case "task-modal-detail":
-          changeContentModal().taskModal("detail");
-          console.log("6");
-          break;
-        case "task-modal-delete":
-          changeContentModal().deleteModal("task");
-          console.log("7");
-          break;
-        case "invalid-modal":
-          changeContentModal().invalidModal();
-          console.log("8");
-          break;
-        default:
-          break;
-      }
-    }
-    // close modal
-    function closeModal(closingModal) {
-      switch (closingModal) {
-        case undefined:
-          overlayEl.classList.add("hidden");
-          overlayEl.classList.remove("invalid");
-          const modalEl = document.querySelectorAll(".modal");
-          modalEl.forEach((modal) => {
-            modal.classList.add("hidden");
-          });
-          break;
-        case "invalid":
-          const modalInvalidEl = document.querySelector(".modal.invalid");
-          modalInvalidEl.classList.add("hidden");
-          overlayEl.classList.remove("invalid");
-          break;
-        default:
-          break;
-      }
-    }
 
-    // return
-    return { openModal, closeModal };
+  // Render the main content based on the call of dom-manipulation
+  function renderMainContent(content) {
+    const currentDisplayTitle = document.querySelector(".display-title");
+    const addTaskButton = document.querySelector("button.add-task");
+    let filterCategories = pubSubConnection.currentContent;
+    const currentObj = pubSubConnection.filterObjectShuffle();
+
+    // Main content will change based on the content that were called
+    switch (content) {
+      case "categories":
+        currentDisplayTitle.innerHTML = `<i class="${filterCategories[0]}"></i>${filterCategories[1]}`;
+        addTaskButton.classList.add("hidden");
+        break;
+
+      case "project":
+        currentDisplayTitle.innerHTML = `<i class="${filterCategories[0]}"></i>${filterCategories[1]}`;
+        addTaskButton.classList.remove("hidden");
+        break;
+
+      case "task":
+        console.log(currentObj);
+        const taskListContainer = document.querySelector(".task-container");
+
+        while (taskListContainer.firstChild) {
+          taskListContainer.removeChild(taskListContainer.firstChild);
+        }
+
+        //
+
+        console.log(taskListContainer);
+        currentObj.taskList.forEach((allTask) => {
+          console.log(allTask);
+          const createLi = document.createElement("li");
+          createLi.textContent = allTask.title;
+          taskListContainer.append(createLi);
+        });
+
+        console.log(currentObj.taskList);
+        // createLi.textContent = currentObj.taskList
+
+        break;
+
+      case "default":
+        currentDisplayTitle.textContent = "What To Do Today?";
+        addTaskButton.classList.add("hidden");
+
+      default:
+        break;
+    }
   }
+
+  // open and change content modal
+  function openModal(openModal) {
+    switch (openModal) {
+      case "project-modal-add":
+        changeContentModal().projectModal("add");
+        console.log("1");
+        break;
+      case "project-modal-edit":
+        changeContentModal().projectModal("edit");
+        console.log("2");
+        break;
+      case "project-modal-delete":
+        changeContentModal().deleteModal("project");
+        console.log("3");
+        break;
+      case "task-modal-add":
+        changeContentModal().taskModal("add");
+        console.log("4");
+        break;
+      case "task-modal-edit":
+        changeContentModal().taskModal("edit");
+        console.log("5");
+        break;
+      case "task-modal-detail":
+        changeContentModal().taskModal("detail");
+        console.log("6");
+        break;
+      case "task-modal-delete":
+        changeContentModal().deleteModal("task");
+        console.log("7");
+        break;
+      case "invalid-modal":
+        changeContentModal().invalidModal();
+        console.log("8");
+        break;
+      default:
+        break;
+    }
+  }
+
+  // close modal
+  function closeModal(closingModal) {
+    console.log("render4");
+
+    const overlayEl = document.querySelector(".overlay");
+
+    switch (closingModal) {
+      case undefined:
+        overlayEl.classList.add("hidden");
+        overlayEl.classList.remove("invalid");
+        const modalEl = document.querySelectorAll(".modal");
+        modalEl.forEach((modal) => {
+          modal.classList.add("hidden");
+        });
+        break;
+      case "invalid":
+        const modalInvalidEl = document.querySelector(".modal.invalid");
+        modalInvalidEl.classList.add("hidden");
+        overlayEl.classList.remove("invalid");
+        break;
+      default:
+        break;
+    }
+  }
+
   // Change the rendering modal based on the call of renderModal()
   const changeContentModal = function () {
     const overlayEl = document.querySelector(".overlay");
     overlayEl.classList.remove("hidden");
-
     let filterObject = pubSubConnection.filterObjectShuffle();
 
     // Rendering change and display of "Project Modal"
@@ -248,6 +244,7 @@ export const domDisplay = (function () {
           break;
       }
     }
+
     // Rendering change and display of "Task Modal"
     function taskModal(display) {
       const modal = document.querySelector(".modal.task");
@@ -275,6 +272,7 @@ export const domDisplay = (function () {
           break;
       }
     }
+
     // Rendering change and display of "Delete Modal"
     function deleteModal(display) {
       const modal = document.querySelector(".modal.prompt");
@@ -298,6 +296,7 @@ export const domDisplay = (function () {
           break;
       }
     }
+
     // Rendering change and display of "Invalid Modal"
     function invalidModal() {
       const invalidModal = document.querySelector(".modal.invalid");
@@ -307,14 +306,15 @@ export const domDisplay = (function () {
       overlayEl.classList.remove("hidden");
       overlayEl.classList.add("invalid");
     }
+
+    // Return
     return { projectModal, taskModal, deleteModal, invalidModal };
   };
 
   return {
-    initialRenderContent,
-    renderSidebarProject,
     renderMainContent,
     renderSidebarProject,
-    renderModal,
+    openModal,
+    closeModal,
   };
 })();
