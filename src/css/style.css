@@ -1,6 +1,7 @@
 @import "import.css";
 @import "content.css";
 @import "modal.css";
+@import "sidebar.css";
 
 :root {
   --color-1: rgb(255, 234, 221);
@@ -45,6 +46,12 @@ p {
 
 .main {
   display: flex;
+}
+
+/* All */
+.sidebar .task-list,
+.sidebar .project-list {
+  width: 90%;
 }
 
 /* Media Query */

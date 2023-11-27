@@ -1,8 +1,8 @@
-import { format, isPast, parseISO } from "date-fns";
+import { isPast, parseISO } from "date-fns";
 import { pubSubConnection } from ".";
-import { domDisplay } from "./dom-display";
 import { project } from "./project";
 import { task } from "./task";
+import { domDisplay } from "./dom-display";
 
 export const domManipulation = (function () {
   (function init() {
@@ -13,21 +13,27 @@ export const domManipulation = (function () {
     sideListTaskEvent();
     sideListProjectEvent();
 
-    // Toggle Modal
+    // Toggle Modal Project
     toggleProjectAddModal();
     toggleProjectEditModal();
     toggleProjectDeleteModal();
+
+    // Toggle Modal Task
     toggleTaskAddModal();
+    toggleTaskDetailModal();
     toggleTaskEditModal();
-    // toggleTaskDeleteModal();
+    toggleTaskDeleteModal();
+    toggleTaskComplete();
+
+    // Toggle Close Modal
     toggleCloseModal();
 
-    // Event Modal
+    // Event Modal Project
     projectModalEventAdd();
     projectModalEventEdit();
     projectModalEventDelete();
 
-    //
+    // Event Modal Task
     taskModalEventAdd();
   })();
 
@@ -114,7 +120,7 @@ export const domManipulation = (function () {
 
     projectList.forEach((project) => {
       project.addEventListener("click", () => {
-        pubSubConnection.currentId = project.id;
+        pubSubConnection.currentSideId = project.id;
         pubSubConnection.currentContent = [
           project.children[0].children[0].className,
           project.children[0].children[1].textContent,
@@ -158,7 +164,7 @@ export const domManipulation = (function () {
     );
     editProjectButton.forEach((editButton) => {
       editButton.addEventListener("click", () => {
-        pubSubConnection.currentSide =
+        pubSubConnection.currentSideId =
           editButton.parentElement.parentElement.id;
         domDisplay.openModal("project-modal-edit");
       });
@@ -172,7 +178,7 @@ export const domManipulation = (function () {
     );
     deleteProjectButton.forEach((deleteButton) => {
       deleteButton.addEventListener("click", () => {
-        pubSubConnection.currentSide =
+        pubSubConnection.currentSideId =
           deleteButton.parentElement.parentElement.id;
         domDisplay.openModal("project-modal-delete");
       });
@@ -188,9 +194,50 @@ export const domManipulation = (function () {
     });
   }
 
-  function toggleTaskEditModal() {
-    // "Edit" task modal
-    // TBD
+  function toggleTaskDetailModal() {
+    const detailEl = document.querySelectorAll(
+      ".task-container li button.detail-task"
+    );
+
+    detailEl.forEach((detailButton) => {
+      detailButton.addEventListener("click", () => {
+        pubSubConnection.currentTaskId =
+          detailButton.parentElement.parentElement.id;
+        domDisplay.openModal("task-modal-detail");
+      });
+    });
+  }
+
+  function toggleTaskDeleteModal() {}
+  function toggleTaskEditModal() {}
+
+  function toggleTaskComplete() {
+    const taskListItem = document.querySelectorAll(".task-container li");
+
+    taskListItem.forEach((list) => {
+      list.addEventListener("click", (e) => {
+        let node = e.target.nodeName;
+        pubSubConnection.currentTaskId = list.id;
+
+        if (node == "LI" || node == "DIV" || node == "P") {
+          toggleCompleteTask(list);
+        }
+      });
+    });
+
+    function toggleCompleteTask(list) {
+      const currentTask = pubSubConnection.filterTaskShuffle();
+
+      if (currentTask.isComplete === false) {
+        currentTask.isComplete = true;
+        list.classList.add("task-completed");
+        list.children[0].children[0].setAttribute("checked", "");
+      } else if (currentTask.isComplete === true) {
+        currentTask.isComplete = false;
+        list.classList.remove("task-completed");
+        list.children[0].children[0].removeAttribute("checked", "");
+      }
+    }
   }
 
   function toggleCloseModal() {
@@ -210,13 +257,13 @@ export const domManipulation = (function () {
       ".button.cancel-invalid-modal"
     );
     invalidModalButton.addEventListener("click", () => {
-      domDisplay.closeModal("invalid");
+      domDisplay.closeModalInvalid();
     });
 
     // Overlay (the blue behind the modal) click for closing the modal
     overlayEl.addEventListener("click", () => {
       if (overlayEl.classList.contains("invalid")) {
-        domDisplay.closeModal("invalid");
+        domDisplay.closeModalInvalid();
       } else {
         domDisplay.closeModal();
       }
@@ -227,7 +274,7 @@ export const domManipulation = (function () {
       modalElAll.forEach((modal) => {
         if (e.key === "Escape" && !modal.classList.contains("hidden")) {
           if (overlayEl.classList.contains("invalid")) {
-            domDisplay.closeModal("invalid");
+            domDisplay.closeModalInvalid();
           } else {
             domDisplay.closeModal();
           }
@@ -426,11 +473,14 @@ export const domManipulation = (function () {
         title,
         description,
         dueDate,
-        priority
+        priority,
+        currentObj.title
       );
       currentObj.taskList.push(taskCreated);
       domDisplay.renderMainContent("task");
       domDisplay.closeModal();
+      console.log(project.projectList);
+      // resetMainEvent();
     };
   }
 

@@ -7,6 +7,55 @@ export const domDisplay = (function () {
     renderSidebarProject();
   })();
 
+  temporaryDevelopment();
+  function temporaryDevelopment() {
+    const currentObj = project.projectList[0].taskList;
+    const taskListContainer = document.querySelector(".task-container");
+
+    while (taskListContainer.firstChild) {
+      taskListContainer.removeChild(taskListContainer.firstChild);
+    }
+
+    currentObj.forEach((allTask) => {
+      //
+      const createLi = document.createElement("li");
+      createLi.id = `${allTask.taskId}`;
+      taskListContainer.append(createLi);
+      //
+      const createDivOne = document.createElement("div");
+      const createDivTwo = document.createElement("div");
+      createLi.append(createDivOne, createDivTwo);
+      //
+      const createPara = document.createElement("p");
+      createPara.textContent = `${allTask.title}`;
+      // createPara.setAttribute("for", "complete");
+      //
+      const createInputRadio = document.createElement("input");
+      createInputRadio.setAttribute("type", "checkbox");
+      createInputRadio.setAttribute("class", "complete");
+      createInputRadio.setAttribute("name", "complete");
+      //
+      const createEditButton = document.createElement("button");
+      createEditButton.classList.add("edit-task");
+      createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+      //
+      const createDeleteButton = document.createElement("button");
+      createDeleteButton.classList.add("delete-task");
+      createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+      //
+      const createDetailButton = document.createElement("button");
+      createDetailButton.classList.add("detail-task");
+      createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
+      //
+      createDivOne.append(createInputRadio, createPara);
+      createDivTwo.append(
+        createDetailButton,
+        createEditButton,
+        createDeleteButton
+      );
+    });
+  }
+
   // Initial rendering content (Not used in any other function, only for initialization)
   function initialRenderContent() {
     const createDisplayTitle = document.createElement("h1");
@@ -90,7 +139,6 @@ export const domDisplay = (function () {
     let filterCategories = pubSubConnection.currentContent;
     const currentObj = pubSubConnection.filterObjectShuffle();
 
-    // Main content will change based on the content that were called
     switch (content) {
       case "categories":
         currentDisplayTitle.innerHTML = `<i class="${filterCategories[0]}"></i>${filterCategories[1]}`;
@@ -103,25 +151,49 @@ export const domDisplay = (function () {
         break;
 
       case "task":
-        console.log(currentObj);
         const taskListContainer = document.querySelector(".task-container");
-
         while (taskListContainer.firstChild) {
           taskListContainer.removeChild(taskListContainer.firstChild);
         }
 
-        //
-
-        console.log(taskListContainer);
         currentObj.taskList.forEach((allTask) => {
-          console.log(allTask);
+          //
           const createLi = document.createElement("li");
-          createLi.textContent = allTask.title;
+          createLi.id = `${allTask.taskId}`;
           taskListContainer.append(createLi);
+          //
+          const createDivOne = document.createElement("div");
+          const createDivTwo = document.createElement("div");
+          createLi.append(createDivOne, createDivTwo);
+          //
+          const createLabel = document.createElement("label");
+          createLabel.textContent = `${allTask.title}`;
+          createLabel.setAttribute("for", "complete");
+          //
+          const createInputRadio = document.createElement("input");
+          createInputRadio.setAttribute("type", "checkbox");
+          createInputRadio.setAttribute("id", "complete");
+          createInputRadio.setAttribute("name", "complete");
+          //
+          const createEditButton = document.createElement("button");
+          createEditButton.classList.add("edit-task");
+          createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+          //
+          const createDeleteButton = document.createElement("button");
+          createDeleteButton.classList.add("delete-task");
+          createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+          //
+          const createDetailButton = document.createElement("button");
+          createDetailButton.classList.add("detail-task");
+          createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
+          //
+          createDivOne.append(createInputRadio, createLabel);
+          createDivTwo.append(
+            createDetailButton,
+            createEditButton,
+            createDeleteButton
+          );
         });
-
-        console.log(currentObj.taskList);
-        // createLi.textContent = currentObj.taskList
 
         break;
 
@@ -132,6 +204,27 @@ export const domDisplay = (function () {
       default:
         break;
     }
+  }
+
+  // close modal
+  function closeModal() {
+    const overlayEl = document.querySelector(".overlay");
+    overlayEl.classList.add("hidden");
+    overlayEl.classList.remove("invalid");
+
+    const modalEl = document.querySelectorAll(".modal");
+    modalEl.forEach((modal) => {
+      modal.classList.add("hidden");
+    });
+  }
+
+  //
+  function closeModalInvalid() {
+    const overlayEl = document.querySelector(".overlay");
+
+    const modalInvalidEl = document.querySelector(".modal.invalid");
+    modalInvalidEl.classList.add("hidden");
+    overlayEl.classList.remove("invalid");
   }
 
   // open and change content modal
@@ -158,7 +251,7 @@ export const domDisplay = (function () {
         console.log("5");
         break;
       case "task-modal-detail":
-        changeContentModal().taskModal("detail");
+        changeContentModal().detailModal();
         console.log("6");
         break;
       case "task-modal-delete":
@@ -174,36 +267,11 @@ export const domDisplay = (function () {
     }
   }
 
-  // close modal
-  function closeModal(closingModal) {
-    console.log("render4");
-
-    const overlayEl = document.querySelector(".overlay");
-
-    switch (closingModal) {
-      case undefined:
-        overlayEl.classList.add("hidden");
-        overlayEl.classList.remove("invalid");
-        const modalEl = document.querySelectorAll(".modal");
-        modalEl.forEach((modal) => {
-          modal.classList.add("hidden");
-        });
-        break;
-      case "invalid":
-        const modalInvalidEl = document.querySelector(".modal.invalid");
-        modalInvalidEl.classList.add("hidden");
-        overlayEl.classList.remove("invalid");
-        break;
-      default:
-        break;
-    }
-  }
-
   // Change the rendering modal based on the call of renderModal()
   const changeContentModal = function () {
     const overlayEl = document.querySelector(".overlay");
     overlayEl.classList.remove("hidden");
-    let filterObject = pubSubConnection.filterObjectShuffle();
+    const filterCategories = pubSubConnection.filterObjectShuffle();
 
     // Rendering change and display of "Project Modal"
     function projectModal(display) {
@@ -228,17 +296,15 @@ export const domDisplay = (function () {
           addButton.classList.remove("hidden");
           break;
         case "edit":
-          input.value = `${filterObject.title}`;
+          input.value = `${filterCategories.title}`;
           radioDiv.childNodes.forEach((radioButton) => {
-            if (filterObject.icon === radioButton.id) {
+            if (filterCategories.icon === radioButton.id) {
               radioButton.checked = true;
             }
           });
           h1.textContent = "Edit Project";
           addButton.classList.add("hidden");
           editButton.classList.remove("hidden");
-          break;
-        case "delete":
           break;
         default:
           break;
@@ -264,13 +330,33 @@ export const domDisplay = (function () {
           taskModalButtonEl.textContent = "Edit";
           taskModalButtonEl.className = "button edit-modal";
           break;
-        case "detail":
-          break;
-        case "delete":
-          break;
         default:
           break;
       }
+    }
+
+    // Render change and display detail modal
+    function detailModal() {
+      const currentTask = pubSubConnection.filterTaskShuffle();
+      console.log(currentTask);
+      console.log(project.projectList);
+
+      const modalDetail = document.querySelector(".modal.detail");
+      modalDetail.classList.remove("hidden");
+
+      const detailList = modalDetail.querySelector("ul");
+
+      const detailOne = detailList.children[0].children[1];
+      const detailTwo = detailList.children[1].children[1];
+      const detailThree = detailList.children[2].children[1];
+      const detailFour = detailList.children[3].children[1];
+      const detailFive = detailList.children[4].children[1];
+
+      detailOne.textContent = `${currentTask.title}`;
+      detailTwo.textContent = `${currentTask.description}`;
+      detailThree.textContent = `${currentTask.dueDate}`;
+      detailFour.textContent = `${currentTask.priority}`;
+      detailFive.textContent = `${currentTask.projectName}`;
     }
 
     // Rendering change and display of "Delete Modal"
@@ -281,8 +367,6 @@ export const domDisplay = (function () {
       const button = document.querySelector(
         ".modal.prompt button.delete-modal"
       );
-
-      console.log(button);
 
       switch (display) {
         case "project":
@@ -308,7 +392,7 @@ export const domDisplay = (function () {
     }
 
     // Return
-    return { projectModal, taskModal, deleteModal, invalidModal };
+    return { projectModal, taskModal, deleteModal, invalidModal, detailModal };
   };
 
   return {
@@ -316,5 +400,6 @@ export const domDisplay = (function () {
     renderSidebarProject,
     openModal,
     closeModal,
+    closeModalInvalid,
   };
 })();

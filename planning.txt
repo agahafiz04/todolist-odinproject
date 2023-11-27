@@ -94,3 +94,7 @@ Icon List
 
 Tomorrow
 - Continue to fix bug of the modal and project
+
+
+// Tailwindcss
+// Jquery

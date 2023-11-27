@@ -1,9 +1,3 @@
-/* All */
-.sidebar .task-list,
-.sidebar .project-list {
-  width: 90%;
-}
-
 /* Header */
 
 .header {
@@ -91,160 +85,96 @@
   margin-right: 15px;
 }
 
+/* Task List */
 .main .content .task-container li {
-  background-color: var(--color-4);
+  background-color: var(--color-3);
   border: none;
+  border-radius: 10px;
   font-weight: bolder;
   font-size: 1.1rem;
   margin-top: 10px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.3rem;
   padding: 20px;
-}
 
-/* Sidebar */
-
-.main .sidebar {
-  position: fixed;
-  z-index: 5;
-  background-color: var(--color-3);
-  width: 0px;
-  height: calc(100% - 105px);
-  padding-top: 5px;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  transition: 0.3s;
-}
-
-.sidebar ul li {
-  width: 335px;
-}
-
-.sidebar ul li i {
-  width: 20px;
-}
-
-.sidebar > div {
-  padding-left: 25px;
-  width: 310px;
-  font-size: 1rem;
-  list-style: none;
-  transition: 0.3s;
-}
-
-.sidebar > div ul {
-  padding: 0px;
-}
-
-.sidebar > div ul li {
-  margin-bottom: 16px;
-  background-color: var(--color-2);
-  padding: 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.sidebar > div ul li:hover {
-  transition: 0.3s;
-  background-color: var(--color-1);
-}
-
-.sidebar > div ul li.currently-selected {
-  background-color: var(--color-4);
-  transition: 0.3s;
-}
-
-.sidebar > div ul li {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.sidebar > div h1 {
-  font-size: 1.2rem;
-  margin-top: 30px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid white;
-}
-
-/* Sidebar Task */
-
-.sidebar .task-list h1 {
-  margin-top: 20px;
-}
-
-/* Sidebar Project */
-.sidebar .project-list button.add-project {
-  text-align: left;
-  width: 335px;
-  padding: 15px;
-  border-radius: 5px;
-  border: none;
-  background-color: var(--color-3);
-  cursor: pointer;
-}
-
-.sidebar .project-list button.add-project:hover {
-  background-color: var(--color-2);
-}
-
-.sidebar .project-list button.add-project:active {
-  background-color: var(--color-4);
-}
-
-.sidebar .project-list .add-project i {
-  margin-right: 10px;
-}
-
-.sidebar .project-list ul li {
-  display: flex;
   justify-content: space-between;
-  padding-top: 10px;
-  padding-bottom: 10px;
+
+  transition: 0.3s;
 }
 
-.sidebar .project-list ul li > * {
+.main .content .task-container li.task-completed {
+  background-color: var(--color-5);
+}
+
+.main .content .task-container li.task-completed label {
+  text-decoration: line-through;
+}
+
+.main .content .task-container li:hover {
+  background-color: var(--color-4);
+  transition: 0.3s;
+}
+
+.main .content .task-container li > div {
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 10px;
+  justify-content: center;
 }
 
-.sidebar .project-list ul li div:nth-child(2) {
-  gap: 5px;
-}
-
-.sidebar .project-list ul li div:nth-child(2) button {
-  cursor: crosshair;
-  background-color: var(--color-2);
+.main .content .task-container button {
+  padding: 10px;
+  border-radius: 10px;
   border: none;
-  border-radius: 5px;
-
-  height: 30px;
+  background-color: var(--color-3);
+  cursor: pointer;
 }
 
-/* Sidebar Toggle */
-
-.sidebar.toggle-bar {
-  width: 400px;
-  transition: 0.3s;
+.main .content .task-container button:hover {
+  background-color: var(--color-2);
 }
 
-.content.toggle-content {
-  margin-left: 400px;
-  transition: 0.3s;
-}
-
-.content.toggle-content.fixed {
-  margin-left: 0px;
-  opacity: 0.5;
+.main .content .task-container label,
+.main .content .task-container input[type="checkbox"] {
   pointer-events: none;
 }
 
-/* Footer */
+.main .content .task-container input[type="checkbox"] {
+  appearance: none;
+  background-color: var(--form-background);
+  margin: 0;
 
+  font: inherit;
+  color: currentColor;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid white;
+  border-radius: 0.15em;
+
+  display: grid;
+  place-content: center;
+
+  pointer-events: none;
+}
+
+.main .content .task-container input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  background-color: white;
+}
+
+.main .content .task-container input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+/* Footer */
 .footer {
   font-size: 0.7rem;
   justify-content: center;

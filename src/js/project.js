@@ -27,7 +27,6 @@ export const project = (function () {
   const projectTwo = createProject("All Righty", "workout");
   const projectThree = createProject("NiceBrow", "study");
   projectList.push(projectOne, projectTwo, projectThree);
-  console.log(projectList);
 
   return { projectList, createProject, updateProject, deleteProject };
 })();
