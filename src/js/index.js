@@ -10,6 +10,7 @@ export let pubSubConnection = {
   currentSideId: "null",
   currentContent: "null",
   currentTaskId: "null",
+  currentDisplay: "null",
 
   filterObjectShuffle() {
     let filterObject = project.projectList.find(
@@ -31,32 +32,34 @@ export let pubSubConnection = {
     });
 
     // Second loop
-    const final = process.find(
+    const deleteUndefined = process.filter(function (el) {
+      return el !== undefined;
+    });
+
+    // Second loop
+    const final = deleteUndefined.find(
       (task) => task.taskId === pubSubConnection.currentTaskId
     );
 
     return final;
   },
 
-  checkProjectAvailable() {
-    if (project.projectList.length === 0) {
-      console.log("There is no project");
-      return;
-    }
-    console.log("There is a project");
-  },
+  getAllTask() {
+    const taskArray = [];
 
-  checkTaskAvailable() {
     project.projectList.forEach((project) => {
-      if (project.taskList.length === 0) {
-        console.log(`there is no task in project ${project.title}`);
-        return;
-      }
+      console.log(project.taskList);
 
-      console.log(`there is a task in project ${project.title}`);
+      project.taskList.forEach((taskItem) => {
+        taskArray.push(taskItem);
+      });
     });
+
+    return taskArray;
   },
 };
+
+pubSubConnection.getAllTask();
 
 Object.preventExtensions(pubSubConnection);
 

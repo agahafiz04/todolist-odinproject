@@ -23,7 +23,7 @@ export const domManipulation = (function () {
     toggleTaskDetailModal();
     toggleTaskEditModal();
     toggleTaskDeleteModal();
-    toggleTaskComplete();
+    mainListTaskEvent();
 
     // Toggle Close Modal
     toggleCloseModal();
@@ -35,6 +35,8 @@ export const domManipulation = (function () {
 
     // Event Modal Task
     taskModalEventAdd();
+    taskModalEventEdit();
+    taskModalEventDelete();
   })();
 
   // Sidebar OnChange Event (opening and closing sidebar automatically and manually)
@@ -105,9 +107,15 @@ export const domManipulation = (function () {
           categories.children[0].className,
           categories.children[1].textContent,
         ];
+        pubSubConnection.currentSideId = categories.dataset.categories;
+        pubSubConnection.currentDisplay = "Categories";
         sideListRemoveEvent();
+
         categories.classList.add("currently-selected");
-        domDisplay.renderMainContent("categories");
+        // domDisplay.renderMainContent("categories");
+        resetCategoriesEvent();
+
+        console.log(pubSubConnection);
       });
     });
   }
@@ -125,9 +133,14 @@ export const domManipulation = (function () {
           project.children[0].children[0].className,
           project.children[0].children[1].textContent,
         ];
+        pubSubConnection.currentDisplay = "Project";
         sideListRemoveEvent();
+
         project.classList.add("currently-selected");
-        domDisplay.renderMainContent("project");
+        // domDisplay.renderMainContent("project");
+        resetMainEvent();
+
+        console.log(pubSubConnection);
       });
     });
   }
@@ -148,6 +161,8 @@ export const domManipulation = (function () {
   }
 
   // Toggle modal (Event for opening and closing the modal based on the button pressed)
+
+  // Project
   function toggleProjectAddModal() {
     // "Add" project modal
     const addProjectButton = document.querySelector(
@@ -164,6 +179,7 @@ export const domManipulation = (function () {
     );
     editProjectButton.forEach((editButton) => {
       editButton.addEventListener("click", () => {
+        console.log("test");
         pubSubConnection.currentSideId =
           editButton.parentElement.parentElement.id;
         domDisplay.openModal("project-modal-edit");
@@ -185,6 +201,7 @@ export const domManipulation = (function () {
     });
   }
 
+  // Task
   function toggleTaskAddModal() {
     // "Add" task modal
     const addTaskButton = document.querySelector("button.add-task");
@@ -194,9 +211,39 @@ export const domManipulation = (function () {
     });
   }
 
+  function toggleTaskEditModal() {
+    // "Add" task modal
+    const editButton = document.querySelectorAll(
+      ".task-container button.edit-task"
+    );
+
+    editButton.forEach((editButton) => {
+      editButton.addEventListener("click", () => {
+        pubSubConnection.currentTaskId =
+          editButton.parentElement.parentElement.id;
+        domDisplay.openModal("task-modal-edit");
+      });
+    });
+  }
+
+  function toggleTaskDeleteModal() {
+    // "Delete" project modal
+    const deleteTaskButton = document.querySelectorAll(
+      ".task-container button.delete-task"
+    );
+
+    deleteTaskButton.forEach((deleteButton) => {
+      deleteButton.addEventListener("click", () => {
+        pubSubConnection.currentTaskId =
+          deleteButton.parentElement.parentElement.id;
+        domDisplay.openModal("task-modal-delete");
+      });
+    });
+  }
+
   function toggleTaskDetailModal() {
     const detailEl = document.querySelectorAll(
-      ".task-container li button.detail-task"
+      ".task-container button.detail-task"
     );
 
     detailEl.forEach((detailButton) => {
@@ -208,10 +255,7 @@ export const domManipulation = (function () {
     });
   }
 
-  function toggleTaskDeleteModal() {}
-  function toggleTaskEditModal() {}
-
-  function toggleTaskComplete() {
+  function mainListTaskEvent() {
     const taskListItem = document.querySelectorAll(".task-container li");
 
     taskListItem.forEach((list) => {
@@ -222,6 +266,13 @@ export const domManipulation = (function () {
         if (node == "LI" || node == "DIV" || node == "P") {
           toggleCompleteTask(list);
         }
+
+        const currentTask = pubSubConnection.filterTaskShuffle();
+        project.projectList.forEach((project) => {
+          if (currentTask.projectName === project.title) {
+            pubSubConnection.currentSideId = project.projectId;
+          }
+        });
       });
     });
 
@@ -240,6 +291,7 @@ export const domManipulation = (function () {
     }
   }
 
+  // Closing modal
   function toggleCloseModal() {
     const overlayEl = document.querySelector(".overlay");
     const modalElAll = document.querySelectorAll(".modal");
@@ -283,7 +335,7 @@ export const domManipulation = (function () {
     });
   }
 
-  // Modal event
+  // Modal event project
   function modalQuery() {
     const modal = document.querySelector(".modal.project");
     const modalMain = modal.children[1].children[0];
@@ -304,15 +356,31 @@ export const domManipulation = (function () {
       checkInput();
     });
 
+    const checkIfProjectNameExist = function () {
+      const isAvail = project.projectList.find(
+        (project) => project.title === input.value
+      );
+
+      if (isAvail === undefined || isAvail === null) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     const checkInput = function () {
       let iconCheck = null;
 
       radioDiv.childNodes.forEach((radioButton) => {
         if (radioButton.checked) {
           iconCheck = radioButton.value;
-          console.log(iconCheck);
         }
       });
+
+      if (checkIfProjectNameExist() === false) {
+        domDisplay.openModal("invalid-modal");
+        return;
+      }
 
       if (input.value === "") {
         domDisplay.openModal("invalid-modal");
@@ -334,6 +402,7 @@ export const domManipulation = (function () {
 
     const create = function (value, icon) {
       const projectCreated = project.createProject(`${value}`, `${icon}`);
+
       project.projectList.push(projectCreated);
       resetSideEvent();
       domDisplay.renderMainContent("default");
@@ -357,7 +426,6 @@ export const domManipulation = (function () {
       radioDiv.childNodes.forEach((radioButton) => {
         if (radioButton.checked) {
           iconCheck = radioButton.value;
-          console.log(iconCheck);
         }
       });
 
@@ -389,7 +457,9 @@ export const domManipulation = (function () {
   function projectModalEventDelete() {
     // Delete button event
     const modalPrompt = document.querySelector(".modal.prompt");
-    const deleteButton = modalPrompt.querySelector("button.delete-modal");
+    const deleteButton = modalPrompt.querySelector(
+      "button.delete-project-modal"
+    );
 
     deleteButton.addEventListener("click", () => {
       deleted();
@@ -404,6 +474,7 @@ export const domManipulation = (function () {
     };
   }
 
+  // Modal event task
   function taskQuery() {
     const modal = document.querySelector(".modal.task");
     const modalMain = modal.children[1].children[0].children[0];
@@ -477,19 +548,151 @@ export const domManipulation = (function () {
         currentObj.title
       );
       currentObj.taskList.push(taskCreated);
-      domDisplay.renderMainContent("task");
+
+      resetMainEvent();
       domDisplay.closeModal();
-      console.log(project.projectList);
-      // resetMainEvent();
     };
   }
 
+  function taskModalEventEdit() {
+    const modalMain = taskQuery().modalMainTwo;
+
+    const inputTitle = taskQuery().inputTitle;
+    const inputDescription = taskQuery().inputDescription;
+    const inputDate = taskQuery().inputDate;
+    const inputPriority = taskQuery().inputPriority;
+    const inputProjectName = document.querySelector(".task #project-choose");
+    const editButton = modalMain.querySelector(".edit-modal");
+
+    editButton.addEventListener("click", () => {
+      check();
+    });
+
+    const check = function () {
+      const parseDate = parseISO(inputDate.value);
+
+      if (inputTitle.value === "") {
+        domDisplay.openModal("invalid-modal");
+        return;
+      }
+
+      if (inputDescription.value === "") {
+        domDisplay.openModal("invalid-modal");
+        return;
+      }
+
+      if (inputDate.value === "") {
+        domDisplay.openModal("invalid-modal");
+        return;
+      }
+
+      if (isPast(parseDate)) {
+        domDisplay.openModal("invalid-modal");
+        return;
+      }
+
+      edit(
+        inputTitle.value,
+        inputDescription.value,
+        inputDate.value,
+        inputPriority.value,
+        inputProjectName.value
+      );
+    };
+
+    const edit = function (title, description, dueDate, priority, projectName) {
+      const currentTask = pubSubConnection.filterTaskShuffle();
+      const currentProject = pubSubConnection.filterObjectShuffle();
+
+      if (inputProjectName.value !== currentProject.title) {
+        task.updateTodoTask(
+          currentTask,
+          title,
+          description,
+          dueDate,
+          priority,
+          projectName
+        );
+
+        task.moveTodoTask(currentTask, projectName);
+        task.deleteTask(currentTask, currentProject);
+      } else {
+        task.updateTodoTask(
+          currentTask,
+          title,
+          description,
+          dueDate,
+          priority,
+          projectName
+        );
+      }
+
+      if (pubSubConnection.currentDisplay === "Categories") {
+        resetCategoriesEvent();
+        domDisplay.closeModal();
+        return;
+      }
+
+      if (pubSubConnection.currentDisplay === "Project") {
+        resetMainEvent();
+        domDisplay.closeModal();
+        return;
+      }
+    };
+  }
+
+  function taskModalEventDelete() {
+    // Delete button event
+    const modalPrompt = document.querySelector(".modal.prompt");
+    const deleteButton = modalPrompt.querySelector("button.delete-task-modal");
+
+    deleteButton.addEventListener("click", () => {
+      deleted();
+    });
+
+    const deleted = function () {
+      const currentTask = pubSubConnection.filterTaskShuffle();
+      const currentProject = pubSubConnection.filterObjectShuffle();
+
+      task.deleteTask(currentTask, currentProject);
+
+      if (pubSubConnection.currentDisplay === "Categories") {
+        resetCategoriesEvent();
+        domDisplay.closeModal();
+        return;
+      }
+
+      if (pubSubConnection.currentDisplay === "Project") {
+        resetMainEvent();
+        domDisplay.closeModal();
+        return;
+      }
+    };
+  }
+
+  // Reset
   function resetSideEvent() {
     domDisplay.renderSidebarProject();
     domDisplay.closeModal();
     sideListProjectEvent();
     toggleProjectEditModal();
     toggleProjectDeleteModal();
+  }
+
+  function resetMainEvent() {
+    domDisplay.renderMainContent("project");
+    mainListTaskEvent();
+    toggleTaskDetailModal();
+    toggleTaskEditModal();
+    toggleTaskDeleteModal();
+  }
+
+  function resetCategoriesEvent() {
+    domDisplay.renderMainContent("categories");
+    mainListTaskEvent();
+    toggleTaskDetailModal();
+    toggleTaskEditModal();
+    toggleTaskDeleteModal();
   }
 
   // Specific event for categories list (Bugged hard to fix)}

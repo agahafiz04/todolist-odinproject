@@ -1,5 +1,7 @@
+import { isThisWeek, isToday, parseISO } from "date-fns";
 import { pubSubConnection } from ".";
 import { project } from "./project";
+import { task } from "./task";
 
 export const domDisplay = (function () {
   (function init() {
@@ -7,54 +9,54 @@ export const domDisplay = (function () {
     renderSidebarProject();
   })();
 
-  temporaryDevelopment();
-  function temporaryDevelopment() {
-    const currentObj = project.projectList[0].taskList;
-    const taskListContainer = document.querySelector(".task-container");
+  // function now() {
+  //   const currentObj = project.projectList[1].taskList;
+  //   const taskListContainer = document.querySelector(".task-container");
 
-    while (taskListContainer.firstChild) {
-      taskListContainer.removeChild(taskListContainer.firstChild);
-    }
+  //   while (taskListContainer.firstChild) {
+  //     taskListContainer.removeChild(taskListContainer.firstChild);
+  //   }
 
-    currentObj.forEach((allTask) => {
-      //
-      const createLi = document.createElement("li");
-      createLi.id = `${allTask.taskId}`;
-      taskListContainer.append(createLi);
-      //
-      const createDivOne = document.createElement("div");
-      const createDivTwo = document.createElement("div");
-      createLi.append(createDivOne, createDivTwo);
-      //
-      const createPara = document.createElement("p");
-      createPara.textContent = `${allTask.title}`;
-      // createPara.setAttribute("for", "complete");
-      //
-      const createInputRadio = document.createElement("input");
-      createInputRadio.setAttribute("type", "checkbox");
-      createInputRadio.setAttribute("class", "complete");
-      createInputRadio.setAttribute("name", "complete");
-      //
-      const createEditButton = document.createElement("button");
-      createEditButton.classList.add("edit-task");
-      createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
-      //
-      const createDeleteButton = document.createElement("button");
-      createDeleteButton.classList.add("delete-task");
-      createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
-      //
-      const createDetailButton = document.createElement("button");
-      createDetailButton.classList.add("detail-task");
-      createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
-      //
-      createDivOne.append(createInputRadio, createPara);
-      createDivTwo.append(
-        createDetailButton,
-        createEditButton,
-        createDeleteButton
-      );
-    });
-  }
+  //   currentObj.forEach((allTask) => {
+  //     //
+  //     const createLi = document.createElement("li");
+  //     createLi.id = `${allTask.taskId}`;
+  //     taskListContainer.append(createLi);
+  //     //
+  //     const createDivOne = document.createElement("div");
+  //     const createDivTwo = document.createElement("div");
+  //     createLi.append(createDivOne, createDivTwo);
+  //     //
+  //     const createPara = document.createElement("p");
+  //     createPara.textContent = `${allTask.title}`;
+  //     // createPara.setAttribute("for", "complete");
+  //     //
+  //     const createInputRadio = document.createElement("input");
+  //     createInputRadio.setAttribute("type", "checkbox");
+  //     createInputRadio.setAttribute("class", "complete");
+  //     createInputRadio.setAttribute("name", "complete");
+  //     //
+  //     const createEditButton = document.createElement("button");
+  //     createEditButton.classList.add("edit-task");
+  //     createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+  //     //
+  //     const createDeleteButton = document.createElement("button");
+  //     createDeleteButton.classList.add("delete-task");
+  //     createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+  //     //
+  //     const createDetailButton = document.createElement("button");
+  //     createDetailButton.classList.add("detail-task");
+  //     createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
+  //     //
+  //     createDivOne.append(createInputRadio, createPara);
+  //     createDivTwo.append(
+  //       createDetailButton,
+  //       createEditButton,
+  //       createDeleteButton
+  //     );
+  //   });
+  // }
+  //}
 
   // Initial rendering content (Not used in any other function, only for initialization)
   function initialRenderContent() {
@@ -137,73 +139,241 @@ export const domDisplay = (function () {
     const currentDisplayTitle = document.querySelector(".display-title");
     const addTaskButton = document.querySelector("button.add-task");
     let filterCategories = pubSubConnection.currentContent;
-    const currentObj = pubSubConnection.filterObjectShuffle();
 
     switch (content) {
       case "categories":
         currentDisplayTitle.innerHTML = `<i class="${filterCategories[0]}"></i>${filterCategories[1]}`;
         addTaskButton.classList.add("hidden");
+        renderSideMain(true);
         break;
 
       case "project":
         currentDisplayTitle.innerHTML = `<i class="${filterCategories[0]}"></i>${filterCategories[1]}`;
         addTaskButton.classList.remove("hidden");
-        break;
-
-      case "task":
-        const taskListContainer = document.querySelector(".task-container");
-        while (taskListContainer.firstChild) {
-          taskListContainer.removeChild(taskListContainer.firstChild);
-        }
-
-        currentObj.taskList.forEach((allTask) => {
-          //
-          const createLi = document.createElement("li");
-          createLi.id = `${allTask.taskId}`;
-          taskListContainer.append(createLi);
-          //
-          const createDivOne = document.createElement("div");
-          const createDivTwo = document.createElement("div");
-          createLi.append(createDivOne, createDivTwo);
-          //
-          const createLabel = document.createElement("label");
-          createLabel.textContent = `${allTask.title}`;
-          createLabel.setAttribute("for", "complete");
-          //
-          const createInputRadio = document.createElement("input");
-          createInputRadio.setAttribute("type", "checkbox");
-          createInputRadio.setAttribute("id", "complete");
-          createInputRadio.setAttribute("name", "complete");
-          //
-          const createEditButton = document.createElement("button");
-          createEditButton.classList.add("edit-task");
-          createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
-          //
-          const createDeleteButton = document.createElement("button");
-          createDeleteButton.classList.add("delete-task");
-          createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
-          //
-          const createDetailButton = document.createElement("button");
-          createDetailButton.classList.add("detail-task");
-          createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
-          //
-          createDivOne.append(createInputRadio, createLabel);
-          createDivTwo.append(
-            createDetailButton,
-            createEditButton,
-            createDeleteButton
-          );
-        });
-
+        renderSideMain();
         break;
 
       case "default":
         currentDisplayTitle.textContent = "What To Do Today?";
         addTaskButton.classList.add("hidden");
+        renderSideMain();
 
       default:
         break;
     }
+  }
+
+  // render main content
+  function renderSideMain(categories) {
+    const currentObj = pubSubConnection.filterObjectShuffle();
+
+    const taskListContainer = document.querySelector(".task-container");
+    while (taskListContainer.firstChild) {
+      taskListContainer.removeChild(taskListContainer.firstChild);
+    }
+
+    if (categories === true) {
+      const currentCategories = document.querySelector(".currently-selected");
+      const currentDisplay = currentCategories.dataset.categories;
+      const allTask = pubSubConnection.getAllTask();
+
+      let theTask = null;
+
+      switch (currentDisplay) {
+        case "all":
+          theTask = allTask;
+          break;
+        case "today":
+          theTask = [];
+          allTask.filter((task) => {
+            const convertDate = parseISO(task.dueDate);
+            const today = isToday(convertDate);
+
+            if (today) {
+              theTask.push(task);
+            }
+          });
+          break;
+        case "week":
+          theTask = [];
+          allTask.filter((task) => {
+            const convertDate = parseISO(task.dueDate);
+            const week = isThisWeek(convertDate);
+
+            console.log(week);
+
+            if (week) {
+              theTask.push(task);
+            }
+          });
+          break;
+        case "important":
+          theTask = [];
+          allTask.forEach((task) => {
+            if (task.priority == "High") {
+              theTask.push(task);
+            }
+          });
+          break;
+        case "completed":
+          theTask = [];
+          allTask.forEach((task) => {
+            if (task.isComplete == true) {
+              theTask.push(task);
+            }
+          });
+
+          break;
+        default:
+          break;
+      }
+
+      theTask.forEach((allTask) => {
+        //
+        const createLi = document.createElement("li");
+        createLi.id = `${allTask.taskId}`;
+        taskListContainer.append(createLi);
+        //
+        const createDivOne = document.createElement("div");
+        const createDivTwo = document.createElement("div");
+        createLi.append(createDivOne, createDivTwo);
+        //
+        const createLabel = document.createElement("p");
+        createLabel.textContent = `${allTask.title}`;
+        createLabel.setAttribute("for", "complete");
+        //
+        const createInputRadio = document.createElement("input");
+        createInputRadio.setAttribute("type", "checkbox");
+        createInputRadio.setAttribute("class", "complete");
+        createInputRadio.setAttribute("name", "complete");
+        //
+        const createEditButton = document.createElement("button");
+        createEditButton.classList.add("edit-task");
+        createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+        //
+        const createDeleteButton = document.createElement("button");
+        createDeleteButton.classList.add("delete-task");
+        createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+        //
+        const createDetailButton = document.createElement("button");
+        createDetailButton.classList.add("detail-task");
+        createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
+        //
+        const createPriorityDisplay = document.createElement("button");
+        createPriorityDisplay.classList.add("priority-task");
+        const createIcon = document.createElement("i");
+        createIcon.className = "fa-solid fa-flag";
+        createPriorityDisplay.append(createIcon);
+
+        switch (allTask.priority) {
+          case "High":
+            createIcon.style.color = "red";
+            break;
+
+          case "Medium":
+            createIcon.style.color = "yellow";
+            break;
+
+          case "Low":
+            createIcon.style.color = "green";
+            break;
+
+          default:
+            break;
+        }
+
+        if (allTask.isComplete === true) {
+          console.log("hello");
+          createInputRadio.setAttribute("checked", "");
+          createLi.classList.add("task-completed");
+        }
+        //
+        createDivOne.append(createInputRadio, createLabel);
+        createDivTwo.append(
+          createPriorityDisplay,
+          createDetailButton,
+          createEditButton,
+          createDeleteButton
+        );
+      });
+
+      return;
+    }
+
+    if (!currentObj) {
+      return;
+    }
+
+    currentObj.taskList.forEach((allTask) => {
+      console.log("play");
+      //
+      const createLi = document.createElement("li");
+      createLi.id = `${allTask.taskId}`;
+      taskListContainer.append(createLi);
+      //
+      const createDivOne = document.createElement("div");
+      const createDivTwo = document.createElement("div");
+      createLi.append(createDivOne, createDivTwo);
+      //
+      const createLabel = document.createElement("p");
+      createLabel.textContent = `${allTask.title}`;
+      createLabel.setAttribute("for", "complete");
+      //
+      const createInputRadio = document.createElement("input");
+      createInputRadio.setAttribute("type", "checkbox");
+      createInputRadio.setAttribute("class", "complete");
+      createInputRadio.setAttribute("name", "complete");
+      //
+      const createEditButton = document.createElement("button");
+      createEditButton.classList.add("edit-task");
+      createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+      //
+      const createDeleteButton = document.createElement("button");
+      createDeleteButton.classList.add("delete-task");
+      createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+      //
+
+      const createDetailButton = document.createElement("button");
+      createDetailButton.classList.add("detail-task");
+      createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
+      //
+      const createPriorityDisplay = document.createElement("button");
+      createPriorityDisplay.classList.add("priority-task");
+      const createIcon = document.createElement("i");
+      createIcon.className = "fa-solid fa-flag";
+      createPriorityDisplay.append(createIcon);
+
+      switch (allTask.priority) {
+        case "High":
+          createIcon.style.color = "red";
+          break;
+
+        case "Medium":
+          createIcon.style.color = "yellow";
+          break;
+
+        case "Low":
+          createIcon.style.color = "green";
+          break;
+
+        default:
+          break;
+      }
+
+      if (allTask.isComplete === true) {
+        console.log("hello");
+        createInputRadio.setAttribute("checked", "");
+        createLi.classList.add("task-completed");
+      }
+      //
+      createDivOne.append(createInputRadio, createLabel);
+      createDivTwo.append(
+        createPriorityDisplay,
+        createDetailButton,
+        createEditButton,
+        createDeleteButton
+      );
+    });
   }
 
   // close modal
@@ -232,35 +402,32 @@ export const domDisplay = (function () {
     switch (openModal) {
       case "project-modal-add":
         changeContentModal().projectModal("add");
-        console.log("1");
+
         break;
       case "project-modal-edit":
         changeContentModal().projectModal("edit");
-        console.log("2");
         break;
       case "project-modal-delete":
         changeContentModal().deleteModal("project");
-        console.log("3");
+
         break;
       case "task-modal-add":
         changeContentModal().taskModal("add");
-        console.log("4");
+
         break;
       case "task-modal-edit":
         changeContentModal().taskModal("edit");
-        console.log("5");
+
         break;
       case "task-modal-detail":
         changeContentModal().detailModal();
-        console.log("6");
+
         break;
       case "task-modal-delete":
         changeContentModal().deleteModal("task");
-        console.log("7");
         break;
       case "invalid-modal":
         changeContentModal().invalidModal();
-        console.log("8");
         break;
       default:
         break;
@@ -278,7 +445,9 @@ export const domDisplay = (function () {
       const modal = document.querySelector(".modal.project");
       const modalHeader = modal.children[0];
       const modalMain = modal.children[1].children[0];
+
       modal.classList.remove("hidden");
+
       const h1 = modalHeader.children[0];
       const input = modalMain.children[0].children[1];
       const radioDiv = modalMain.children[1].children[1];
@@ -296,6 +465,7 @@ export const domDisplay = (function () {
           addButton.classList.remove("hidden");
           break;
         case "edit":
+          console.log("hey");
           input.value = `${filterCategories.title}`;
           radioDiv.childNodes.forEach((radioButton) => {
             if (filterCategories.icon === radioButton.id) {
@@ -314,21 +484,59 @@ export const domDisplay = (function () {
     // Rendering change and display of "Task Modal"
     function taskModal(display) {
       const modal = document.querySelector(".modal.task");
+      const input = modal.querySelector("input");
+      const textArea = modal.querySelector("textarea");
+      const dueDate = modal.querySelector("#due-date");
+      const select = modal.querySelector("select");
       modal.classList.remove("hidden");
+
       const h1 = document.querySelector(".task .modal-header h1");
-      const taskModalButtonEl = document.querySelector(
-        ".task .button:nth-child(2)"
-      );
+      const addButton = document.querySelector(".task button.add-modal");
+      const editButton = document.querySelector(".task button.edit-modal");
+      const projectSelector = document.querySelector(".task #project-choose");
+
       switch (display) {
         case "add":
+          input.value = "";
+          textArea.value = "";
+          dueDate.value = "";
+          select.selectedIndex = 0;
+
           h1.textContent = "New Task";
-          taskModalButtonEl.textContent = "Add";
-          taskModalButtonEl.className = "button add-modal";
+          addButton.classList.remove("hidden");
+          editButton.classList.add("hidden");
+          projectSelector.previousElementSibling.classList.add("hidden");
+          projectSelector.classList.add("hidden");
           break;
         case "edit":
+          const currentTask = pubSubConnection.filterTaskShuffle();
+
+          input.value = currentTask.title;
+          textArea.value = currentTask.description;
+          dueDate.value = currentTask.dueDate;
+          select.value = currentTask.priority;
+
+          projectSelector.previousElementSibling.classList.remove("hidden");
+          projectSelector.classList.remove("hidden");
+
+          while (projectSelector.firstChild) {
+            projectSelector.removeChild(projectSelector.firstChild);
+          }
+
+          project.projectList.forEach((project, index) => {
+            const newElement = document.createElement("option");
+            newElement.text = project.title;
+            projectSelector.add(newElement);
+
+            if (currentTask.projectName === project.title) {
+              projectSelector.selectedIndex = index;
+            }
+          });
+
           h1.textContent = "Edit Task";
-          taskModalButtonEl.textContent = "Edit";
-          taskModalButtonEl.className = "button edit-modal";
+          addButton.classList.add("hidden");
+          editButton.classList.remove("hidden");
+
           break;
         default:
           break;
@@ -338,8 +546,6 @@ export const domDisplay = (function () {
     // Render change and display detail modal
     function detailModal() {
       const currentTask = pubSubConnection.filterTaskShuffle();
-      console.log(currentTask);
-      console.log(project.projectList);
 
       const modalDetail = document.querySelector(".modal.detail");
       modalDetail.classList.remove("hidden");
@@ -364,16 +570,24 @@ export const domDisplay = (function () {
       const modal = document.querySelector(".modal.prompt");
       modal.classList.remove("hidden");
       const text = document.querySelector(".modal.prompt .modal-main ul li h3");
-      const button = document.querySelector(
-        ".modal.prompt button.delete-modal"
+      const buttonTask = document.querySelector(
+        ".modal.prompt button.delete-task-modal"
+      );
+
+      const buttonProject = document.querySelector(
+        " .modal.prompt button.delete-project-modal"
       );
 
       switch (display) {
         case "project":
+          buttonTask.classList.add("hidden");
+          buttonProject.classList.remove("hidden");
           const currentObj = pubSubConnection.filterObjectShuffle();
           text.textContent = `Delete "${currentObj.title}" project?`;
           break;
         case "task":
+          buttonTask.classList.remove("hidden");
+          buttonProject.classList.add("hidden");
           text.textContent = "Are you sure you want to delete this task?";
           break;
         default:

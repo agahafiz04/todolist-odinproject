@@ -108,7 +108,7 @@
   background-color: var(--color-5);
 }
 
-.main .content .task-container li.task-completed label {
+.main .content .task-container li.task-completed p {
   text-decoration: line-through;
 }
 

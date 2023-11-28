@@ -98,3 +98,9 @@ Tomorrow
 
 // Tailwindcss
 // Jquery
+
+// Priority display in task (V)
+// Categories display (V)
+// error prompt
+// localstorage
+// Refactor
