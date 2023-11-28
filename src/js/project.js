@@ -16,7 +16,11 @@ import { v4 as uuidv4 } from "uuid";
 
 export const project = (function () {
   const item = localStorage.getItem("item");
-  const projectList = JSON.parse(item);
+  let projectList = JSON.parse(item);
+
+  if (!projectList) {
+    projectList = [];
+  }
 
   const createProject = (title, icon) => {
     const projectId = uuidv4().slice(0, 8);

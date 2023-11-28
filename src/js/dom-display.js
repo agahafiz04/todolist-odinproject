@@ -88,6 +88,7 @@ export const domDisplay = (function () {
     while (projectListUl.firstChild) {
       projectListUl.removeChild(projectListUl.firstChild);
     }
+
     // Render the project list based on the icon and object array for the project categories list HTML
     project.projectList.forEach((project) => {
       let iconChanger;
