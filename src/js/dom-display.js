@@ -81,6 +81,8 @@ export const domDisplay = (function () {
 
   // Render the sidebar project list
   function renderSidebarProject() {
+    console.log(project.projectList);
+
     const projectListUl = document.querySelector(".project-list ul");
     // Delete the list (Start Fresh)
     while (projectListUl.firstChild) {
@@ -165,8 +167,6 @@ export const domDisplay = (function () {
 
   // render main content
   function renderSideMain(categories) {
-    const currentObj = pubSubConnection.filterObjectShuffle();
-
     const taskListContainer = document.querySelector(".task-container");
     while (taskListContainer.firstChild) {
       taskListContainer.removeChild(taskListContainer.firstChild);
@@ -176,50 +176,47 @@ export const domDisplay = (function () {
       const currentCategories = document.querySelector(".currently-selected");
       const currentDisplay = currentCategories.dataset.categories;
       const allTask = pubSubConnection.getAllTask();
-
-      let theTask = null;
+      let categoriesObj = null;
 
       switch (currentDisplay) {
         case "all":
-          theTask = allTask;
+          categoriesObj = allTask;
           break;
         case "today":
-          theTask = [];
+          categoriesObj = [];
           allTask.filter((task) => {
             const convertDate = parseISO(task.dueDate);
             const today = isToday(convertDate);
 
             if (today) {
-              theTask.push(task);
+              categoriesObj.push(task);
             }
           });
           break;
         case "week":
-          theTask = [];
+          categoriesObj = [];
           allTask.filter((task) => {
             const convertDate = parseISO(task.dueDate);
             const week = isThisWeek(convertDate);
 
-            console.log(week);
-
             if (week) {
-              theTask.push(task);
+              categoriesObj.push(task);
             }
           });
           break;
         case "important":
-          theTask = [];
+          categoriesObj = [];
           allTask.forEach((task) => {
             if (task.priority == "High") {
-              theTask.push(task);
+              categoriesObj.push(task);
             }
           });
           break;
         case "completed":
-          theTask = [];
+          categoriesObj = [];
           allTask.forEach((task) => {
             if (task.isComplete == true) {
-              theTask.push(task);
+              categoriesObj.push(task);
             }
           });
 
@@ -228,84 +225,22 @@ export const domDisplay = (function () {
           break;
       }
 
-      theTask.forEach((allTask) => {
-        //
-        const createLi = document.createElement("li");
-        createLi.id = `${allTask.taskId}`;
-        taskListContainer.append(createLi);
-        //
-        const createDivOne = document.createElement("div");
-        const createDivTwo = document.createElement("div");
-        createLi.append(createDivOne, createDivTwo);
-        //
-        const createLabel = document.createElement("p");
-        createLabel.textContent = `${allTask.title}`;
-        createLabel.setAttribute("for", "complete");
-        //
-        const createInputRadio = document.createElement("input");
-        createInputRadio.setAttribute("type", "checkbox");
-        createInputRadio.setAttribute("class", "complete");
-        createInputRadio.setAttribute("name", "complete");
-        //
-        const createEditButton = document.createElement("button");
-        createEditButton.classList.add("edit-task");
-        createEditButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
-        //
-        const createDeleteButton = document.createElement("button");
-        createDeleteButton.classList.add("delete-task");
-        createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
-        //
-        const createDetailButton = document.createElement("button");
-        createDetailButton.classList.add("detail-task");
-        createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
-        //
-        const createPriorityDisplay = document.createElement("button");
-        createPriorityDisplay.classList.add("priority-task");
-        const createIcon = document.createElement("i");
-        createIcon.className = "fa-solid fa-flag";
-        createPriorityDisplay.append(createIcon);
-
-        switch (allTask.priority) {
-          case "High":
-            createIcon.style.color = "red";
-            break;
-
-          case "Medium":
-            createIcon.style.color = "yellow";
-            break;
-
-          case "Low":
-            createIcon.style.color = "green";
-            break;
-
-          default:
-            break;
-        }
-
-        if (allTask.isComplete === true) {
-          console.log("hello");
-          createInputRadio.setAttribute("checked", "");
-          createLi.classList.add("task-completed");
-        }
-        //
-        createDivOne.append(createInputRadio, createLabel);
-        createDivTwo.append(
-          createPriorityDisplay,
-          createDetailButton,
-          createEditButton,
-          createDeleteButton
-        );
+      categoriesObj.forEach((allTask) => {
+        render(allTask);
       });
+    } else {
+      let currentObj = pubSubConnection.filterObjectShuffle();
 
-      return;
+      if (!currentObj) {
+        return;
+      }
+
+      currentObj.taskList.forEach((allTask) => {
+        render(allTask);
+      });
     }
 
-    if (!currentObj) {
-      return;
-    }
-
-    currentObj.taskList.forEach((allTask) => {
-      console.log("play");
+    function render(allTask) {
       //
       const createLi = document.createElement("li");
       createLi.id = `${allTask.taskId}`;
@@ -332,7 +267,6 @@ export const domDisplay = (function () {
       createDeleteButton.classList.add("delete-task");
       createDeleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
       //
-
       const createDetailButton = document.createElement("button");
       createDetailButton.classList.add("detail-task");
       createDetailButton.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
@@ -361,7 +295,6 @@ export const domDisplay = (function () {
       }
 
       if (allTask.isComplete === true) {
-        console.log("hello");
         createInputRadio.setAttribute("checked", "");
         createLi.classList.add("task-completed");
       }
@@ -373,10 +306,207 @@ export const domDisplay = (function () {
         createEditButton,
         createDeleteButton
       );
-    });
+
+      return;
+    }
   }
 
-  // close modal
+  function openModal(openModal) {
+    switch (openModal) {
+      case "project-modal-add":
+        changeContentModal();
+        projectModal("add");
+        break;
+      case "project-modal-edit":
+        changeContentModal();
+        projectModal("edit");
+        break;
+      case "project-modal-delete":
+        changeContentModal();
+        deleteModal("project");
+        break;
+      case "task-modal-add":
+        changeContentModal();
+        taskModal("add");
+        break;
+      case "task-modal-edit":
+        changeContentModal();
+        taskModal("edit");
+        break;
+      case "task-modal-detail":
+        changeContentModal();
+        taskModal("detail");
+        break;
+      case "task-modal-delete":
+        changeContentModal();
+        deleteModal("task");
+        break;
+      default:
+        break;
+    }
+  }
+
+  function changeContentModal() {
+    const overlayEl = document.querySelector(".overlay");
+    overlayEl.classList.remove("hidden");
+  }
+
+  function projectModal(display) {
+    const filterCategories = pubSubConnection.filterObjectShuffle();
+
+    const modal = document.querySelector(".modal.project");
+    const modalHeader = modal.children[0];
+    const modalMain = modal.children[1].children[0];
+
+    modal.classList.remove("hidden");
+
+    const h1 = modalHeader.children[0];
+    const input = modalMain.children[0].children[1];
+    const radioDiv = modalMain.children[1].children[1];
+    const addButton = modalMain.children[2].children[1];
+    const editButton = modalMain.children[2].children[2];
+
+    switch (display) {
+      case "add":
+        input.value = "";
+        radioDiv.childNodes.forEach((radioButton) => {
+          radioButton.checked = false;
+        });
+        h1.textContent = "New Project";
+        editButton.classList.add("hidden");
+        addButton.classList.remove("hidden");
+        break;
+      case "edit":
+        input.value = `${filterCategories.title}`;
+        radioDiv.childNodes.forEach((radioButton) => {
+          if (filterCategories.icon === radioButton.id) {
+            radioButton.checked = true;
+          }
+        });
+        h1.textContent = "Edit Project";
+        addButton.classList.add("hidden");
+        editButton.classList.remove("hidden");
+        break;
+      default:
+        break;
+    }
+  }
+
+  function taskModal(display) {
+    // Rendering change and display of "Task Modal"
+    const modal = document.querySelector(".modal.task");
+    const input = modal.querySelector("input");
+    const textArea = modal.querySelector("textarea");
+    const dueDate = modal.querySelector("#due-date");
+    const select = modal.querySelector("select");
+
+    const h1 = document.querySelector(".task .modal-header h1");
+    const addButton = document.querySelector(".task button.add-modal");
+    const editButton = document.querySelector(".task button.edit-modal");
+    const projectSelector = document.querySelector(".task #project-choose");
+
+    const currentTask = pubSubConnection.filterTaskShuffle();
+
+    switch (display) {
+      case "add":
+        modal.classList.remove("hidden");
+
+        input.value = "";
+        textArea.value = "";
+        dueDate.value = "";
+        select.selectedIndex = 0;
+
+        h1.textContent = "New Task";
+        addButton.classList.remove("hidden");
+        editButton.classList.add("hidden");
+        projectSelector.previousElementSibling.classList.add("hidden");
+        projectSelector.classList.add("hidden");
+        break;
+
+      case "edit":
+        modal.classList.remove("hidden");
+
+        input.value = currentTask.title;
+        textArea.value = currentTask.description;
+        dueDate.value = currentTask.dueDate;
+        select.value = currentTask.priority;
+
+        projectSelector.previousElementSibling.classList.remove("hidden");
+        projectSelector.classList.remove("hidden");
+
+        while (projectSelector.firstChild) {
+          projectSelector.removeChild(projectSelector.firstChild);
+        }
+
+        project.projectList.forEach((project, index) => {
+          const newElement = document.createElement("option");
+          newElement.text = project.title;
+          projectSelector.add(newElement);
+
+          if (currentTask.projectName === project.title) {
+            projectSelector.selectedIndex = index;
+          }
+        });
+
+        h1.textContent = "Edit Task";
+        addButton.classList.add("hidden");
+        editButton.classList.remove("hidden");
+        break;
+
+      case "detail":
+        const modalDetail = document.querySelector(".modal.detail");
+        modalDetail.classList.remove("hidden");
+
+        const detailList = modalDetail.querySelector("ul");
+
+        const detailOne = detailList.children[0].children[1];
+        const detailTwo = detailList.children[1].children[1];
+        const detailThree = detailList.children[2].children[1];
+        const detailFour = detailList.children[3].children[1];
+        const detailFive = detailList.children[4].children[1];
+
+        detailOne.textContent = `${currentTask.title}`;
+        detailTwo.textContent = `${currentTask.description}`;
+        detailThree.textContent = `${currentTask.dueDate}`;
+        detailFour.textContent = `${currentTask.priority}`;
+        detailFive.textContent = `${currentTask.projectName}`;
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function deleteModal(display) {
+    // Rendering change and display of "Delete Modal"
+    const modal = document.querySelector(".modal.prompt");
+    modal.classList.remove("hidden");
+    const text = document.querySelector(".modal.prompt .modal-main ul li h3");
+    const buttonTask = document.querySelector(
+      ".modal.prompt button.delete-task-modal"
+    );
+
+    const buttonProject = document.querySelector(
+      " .modal.prompt button.delete-project-modal"
+    );
+
+    switch (display) {
+      case "project":
+        buttonTask.classList.add("hidden");
+        buttonProject.classList.remove("hidden");
+        const currentObj = pubSubConnection.filterObjectShuffle();
+        text.textContent = `Delete "${currentObj.title}" project?`;
+        break;
+      case "task":
+        buttonTask.classList.remove("hidden");
+        buttonProject.classList.add("hidden");
+        text.textContent = "Are you sure you want to delete this task?";
+        break;
+      default:
+        break;
+    }
+  }
+
   function closeModal() {
     const overlayEl = document.querySelector(".overlay");
     overlayEl.classList.add("hidden");
@@ -386,9 +516,25 @@ export const domDisplay = (function () {
     modalEl.forEach((modal) => {
       modal.classList.add("hidden");
     });
+
+    const projectJSON = JSON.stringify(project.projectList);
+    localStorage.setItem("item", projectJSON);
+    console.log(projectJSON);
   }
 
-  //
+  function invalidModal(text) {
+    changeContentModal();
+
+    const overlayEl = document.querySelector(".overlay");
+    // Rendering change and display of "Invalid Modal"
+    const invalidModal = document.querySelector(".modal.invalid");
+    const invalidModalText = invalidModal.querySelector("h3");
+    invalidModalText.textContent = `${text}`;
+    invalidModal.classList.remove("hidden");
+    overlayEl.classList.remove("hidden");
+    overlayEl.classList.add("invalid");
+  }
+
   function closeModalInvalid() {
     const overlayEl = document.querySelector(".overlay");
 
@@ -397,223 +543,12 @@ export const domDisplay = (function () {
     overlayEl.classList.remove("invalid");
   }
 
-  // open and change content modal
-  function openModal(openModal) {
-    switch (openModal) {
-      case "project-modal-add":
-        changeContentModal().projectModal("add");
-
-        break;
-      case "project-modal-edit":
-        changeContentModal().projectModal("edit");
-        break;
-      case "project-modal-delete":
-        changeContentModal().deleteModal("project");
-
-        break;
-      case "task-modal-add":
-        changeContentModal().taskModal("add");
-
-        break;
-      case "task-modal-edit":
-        changeContentModal().taskModal("edit");
-
-        break;
-      case "task-modal-detail":
-        changeContentModal().detailModal();
-
-        break;
-      case "task-modal-delete":
-        changeContentModal().deleteModal("task");
-        break;
-      case "invalid-modal":
-        changeContentModal().invalidModal();
-        break;
-      default:
-        break;
-    }
-  }
-
-  // Change the rendering modal based on the call of renderModal()
-  const changeContentModal = function () {
-    const overlayEl = document.querySelector(".overlay");
-    overlayEl.classList.remove("hidden");
-    const filterCategories = pubSubConnection.filterObjectShuffle();
-
-    // Rendering change and display of "Project Modal"
-    function projectModal(display) {
-      const modal = document.querySelector(".modal.project");
-      const modalHeader = modal.children[0];
-      const modalMain = modal.children[1].children[0];
-
-      modal.classList.remove("hidden");
-
-      const h1 = modalHeader.children[0];
-      const input = modalMain.children[0].children[1];
-      const radioDiv = modalMain.children[1].children[1];
-      const addButton = modalMain.children[2].children[1];
-      const editButton = modalMain.children[2].children[2];
-
-      switch (display) {
-        case "add":
-          input.value = "";
-          radioDiv.childNodes.forEach((radioButton) => {
-            radioButton.checked = false;
-          });
-          h1.textContent = "New Project";
-          editButton.classList.add("hidden");
-          addButton.classList.remove("hidden");
-          break;
-        case "edit":
-          console.log("hey");
-          input.value = `${filterCategories.title}`;
-          radioDiv.childNodes.forEach((radioButton) => {
-            if (filterCategories.icon === radioButton.id) {
-              radioButton.checked = true;
-            }
-          });
-          h1.textContent = "Edit Project";
-          addButton.classList.add("hidden");
-          editButton.classList.remove("hidden");
-          break;
-        default:
-          break;
-      }
-    }
-
-    // Rendering change and display of "Task Modal"
-    function taskModal(display) {
-      const modal = document.querySelector(".modal.task");
-      const input = modal.querySelector("input");
-      const textArea = modal.querySelector("textarea");
-      const dueDate = modal.querySelector("#due-date");
-      const select = modal.querySelector("select");
-      modal.classList.remove("hidden");
-
-      const h1 = document.querySelector(".task .modal-header h1");
-      const addButton = document.querySelector(".task button.add-modal");
-      const editButton = document.querySelector(".task button.edit-modal");
-      const projectSelector = document.querySelector(".task #project-choose");
-
-      switch (display) {
-        case "add":
-          input.value = "";
-          textArea.value = "";
-          dueDate.value = "";
-          select.selectedIndex = 0;
-
-          h1.textContent = "New Task";
-          addButton.classList.remove("hidden");
-          editButton.classList.add("hidden");
-          projectSelector.previousElementSibling.classList.add("hidden");
-          projectSelector.classList.add("hidden");
-          break;
-        case "edit":
-          const currentTask = pubSubConnection.filterTaskShuffle();
-
-          input.value = currentTask.title;
-          textArea.value = currentTask.description;
-          dueDate.value = currentTask.dueDate;
-          select.value = currentTask.priority;
-
-          projectSelector.previousElementSibling.classList.remove("hidden");
-          projectSelector.classList.remove("hidden");
-
-          while (projectSelector.firstChild) {
-            projectSelector.removeChild(projectSelector.firstChild);
-          }
-
-          project.projectList.forEach((project, index) => {
-            const newElement = document.createElement("option");
-            newElement.text = project.title;
-            projectSelector.add(newElement);
-
-            if (currentTask.projectName === project.title) {
-              projectSelector.selectedIndex = index;
-            }
-          });
-
-          h1.textContent = "Edit Task";
-          addButton.classList.add("hidden");
-          editButton.classList.remove("hidden");
-
-          break;
-        default:
-          break;
-      }
-    }
-
-    // Render change and display detail modal
-    function detailModal() {
-      const currentTask = pubSubConnection.filterTaskShuffle();
-
-      const modalDetail = document.querySelector(".modal.detail");
-      modalDetail.classList.remove("hidden");
-
-      const detailList = modalDetail.querySelector("ul");
-
-      const detailOne = detailList.children[0].children[1];
-      const detailTwo = detailList.children[1].children[1];
-      const detailThree = detailList.children[2].children[1];
-      const detailFour = detailList.children[3].children[1];
-      const detailFive = detailList.children[4].children[1];
-
-      detailOne.textContent = `${currentTask.title}`;
-      detailTwo.textContent = `${currentTask.description}`;
-      detailThree.textContent = `${currentTask.dueDate}`;
-      detailFour.textContent = `${currentTask.priority}`;
-      detailFive.textContent = `${currentTask.projectName}`;
-    }
-
-    // Rendering change and display of "Delete Modal"
-    function deleteModal(display) {
-      const modal = document.querySelector(".modal.prompt");
-      modal.classList.remove("hidden");
-      const text = document.querySelector(".modal.prompt .modal-main ul li h3");
-      const buttonTask = document.querySelector(
-        ".modal.prompt button.delete-task-modal"
-      );
-
-      const buttonProject = document.querySelector(
-        " .modal.prompt button.delete-project-modal"
-      );
-
-      switch (display) {
-        case "project":
-          buttonTask.classList.add("hidden");
-          buttonProject.classList.remove("hidden");
-          const currentObj = pubSubConnection.filterObjectShuffle();
-          text.textContent = `Delete "${currentObj.title}" project?`;
-          break;
-        case "task":
-          buttonTask.classList.remove("hidden");
-          buttonProject.classList.add("hidden");
-          text.textContent = "Are you sure you want to delete this task?";
-          break;
-        default:
-          break;
-      }
-    }
-
-    // Rendering change and display of "Invalid Modal"
-    function invalidModal() {
-      const invalidModal = document.querySelector(".modal.invalid");
-      const invalidModalText = invalidModal.querySelector("h3");
-      invalidModalText.textContent = "Please insert the form correctly";
-      invalidModal.classList.remove("hidden");
-      overlayEl.classList.remove("hidden");
-      overlayEl.classList.add("invalid");
-    }
-
-    // Return
-    return { projectModal, taskModal, deleteModal, invalidModal, detailModal };
-  };
-
   return {
     renderMainContent,
     renderSidebarProject,
     openModal,
     closeModal,
     closeModalInvalid,
+    invalidModal,
   };
 })();

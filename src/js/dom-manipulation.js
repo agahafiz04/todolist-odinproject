@@ -112,10 +112,7 @@ export const domManipulation = (function () {
         sideListRemoveEvent();
 
         categories.classList.add("currently-selected");
-        // domDisplay.renderMainContent("categories");
         resetCategoriesEvent();
-
-        console.log(pubSubConnection);
       });
     });
   }
@@ -137,10 +134,7 @@ export const domManipulation = (function () {
         sideListRemoveEvent();
 
         project.classList.add("currently-selected");
-        // domDisplay.renderMainContent("project");
         resetMainEvent();
-
-        console.log(pubSubConnection);
       });
     });
   }
@@ -179,7 +173,6 @@ export const domManipulation = (function () {
     );
     editProjectButton.forEach((editButton) => {
       editButton.addEventListener("click", () => {
-        console.log("test");
         pubSubConnection.currentSideId =
           editButton.parentElement.parentElement.id;
         domDisplay.openModal("project-modal-edit");
@@ -378,22 +371,22 @@ export const domManipulation = (function () {
       });
 
       if (checkIfProjectNameExist() === false) {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Project name already exist");
         return;
       }
 
       if (input.value === "") {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Project name cant be empty!");
         return;
       }
 
-      if (input.value.length > 15) {
-        domDisplay.openModal("invalid-modal");
+      if (input.value.length > 20) {
+        domDisplay.invalidModal("Max length of project name is 20");
         return;
       }
 
       if (iconCheck === null) {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Please choose one icon");
         return;
       }
 
@@ -412,8 +405,8 @@ export const domManipulation = (function () {
   function projectModalEventEdit() {
     const modalMain = modalQuery().modalMain;
     const input = modalQuery().input;
-    const radioDiv = modalQuery().radioDiv;
     const editButton = modalMain.children[2].querySelector(".edit-modal");
+    const radioDiv = modalQuery().radioDiv;
 
     // Edit button event for "Project Modal Edit"
     editButton.addEventListener("click", () => {
@@ -422,25 +415,42 @@ export const domManipulation = (function () {
 
     const checkInput = function () {
       const currentObj = pubSubConnection.filterObjectShuffle();
-      let iconCheck;
+
+      const checkIfProjectNameExist = function () {
+        const isAvail = project.projectList.find(
+          (project) => project.title === input.value
+        );
+
+        if (currentObj.title === input.value) {
+          return true;
+        }
+
+        if (isAvail === undefined || isAvail === null) {
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      let iconCheck = null;
       radioDiv.childNodes.forEach((radioButton) => {
         if (radioButton.checked) {
           iconCheck = radioButton.value;
         }
       });
 
+      if (checkIfProjectNameExist() === false) {
+        domDisplay.invalidModal("Project name cant be the same");
+        return;
+      }
+
       if (input.value === "") {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Project name cant be empty");
         return;
       }
 
-      if (input.value.length > 15) {
-        domDisplay.openModal("invalid-modal");
-        return;
-      }
-
-      if (iconCheck === null) {
-        domDisplay.openModal("invalid-modal");
+      if (input.value.length > 20) {
+        domDisplay.invalidModal("Max length of project name is 20");
         return;
       }
 
@@ -510,22 +520,22 @@ export const domManipulation = (function () {
       const parseDate = parseISO(inputDate.value);
 
       if (inputTitle.value === "") {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Task name cant be empty!");
         return;
       }
 
       if (inputDescription.value === "") {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Description cant be empty");
         return;
       }
 
       if (inputDate.value === "") {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Due date cant be empty");
         return;
       }
 
       if (isPast(parseDate)) {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Are you trying to go back in time?");
         return;
       }
 
@@ -572,22 +582,22 @@ export const domManipulation = (function () {
       const parseDate = parseISO(inputDate.value);
 
       if (inputTitle.value === "") {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Task name cant be empty!");
         return;
       }
 
       if (inputDescription.value === "") {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Description cant be empty");
         return;
       }
 
       if (inputDate.value === "") {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Due date cant be empty");
         return;
       }
 
       if (isPast(parseDate)) {
-        domDisplay.openModal("invalid-modal");
+        domDisplay.invalidModal("Are you trying to go back in time?");
         return;
       }
 

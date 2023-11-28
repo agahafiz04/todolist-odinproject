@@ -1,5 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
 
+// const saveTheObject = JSON.stringify(project.projectList);
+// console.log(saveTheObject);
+
+// localStorage.setItem("item", saveTheObject);
+
+// const getTheObject = localStorage.getItem("item")
+// const getTheObjectParsed = JSON.parse(getTheObject)
+
+// console.log(getTheObjectParsed)
+// const projectOne = createProject("Sunday Morning", "work");
+// const projectTwo = createProject("All Righty", "workout");
+// const projectThree = createProject("NiceBrow", "study");
+// projectList.push(projectOne, projectTwo, projectThree);
+
 export const project = (function () {
   const projectList = [];
 
@@ -22,11 +36,6 @@ export const project = (function () {
       }
     });
   };
-
-  const projectOne = createProject("Sunday Morning", "work");
-  const projectTwo = createProject("All Righty", "workout");
-  const projectThree = createProject("NiceBrow", "study");
-  projectList.push(projectOne, projectTwo, projectThree);
 
   return { projectList, createProject, updateProject, deleteProject };
 })();

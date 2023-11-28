@@ -101,6 +101,6 @@ Tomorrow
 
 // Priority display in task (V)
 // Categories display (V)
-// error prompt
+// Refactor (V)
+// error prompt (V)
 // localstorage
-// Refactor

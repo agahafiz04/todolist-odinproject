@@ -4,8 +4,6 @@ import { task } from "./task";
 import { domDisplay } from "./dom-display";
 import { domManipulation } from "./dom-manipulation";
 
-console.log("index");
-
 export let pubSubConnection = {
   currentSideId: "null",
   currentContent: "null",
@@ -48,8 +46,6 @@ export let pubSubConnection = {
     const taskArray = [];
 
     project.projectList.forEach((project) => {
-      console.log(project.taskList);
-
       project.taskList.forEach((taskItem) => {
         taskArray.push(taskItem);
       });
@@ -59,25 +55,13 @@ export let pubSubConnection = {
   },
 };
 
-pubSubConnection.getAllTask();
-
 Object.preventExtensions(pubSubConnection);
+// const saveTheObject = JSON.stringify(project.projectList);
+// console.log(saveTheObject);
 
-// project.projectList.forEach((project) => {
-//   let filterTask = project.taskList.find((taskItem) => taskItem.taskId);
+// localStorage.setItem("item", saveTheObject);
 
-//   console.log(filterTask);
-// });
+// const getTheObject = localStorage.getItem("item")
+// const getTheObjectParsed = JSON.parse(getTheObject)
 
-// project.projectList.forEach((project) => {
-//   let filterTask = project.taskList.find((item) => item.title === "Buy");
-//   console.log(filterTask);
-// });
-
-// project.projectList.forEach((project) => {
-//   let filterTask = project.taskList.forEach((item) => {
-//     console.log(item.taskId);
-//   });
-
-//   // console.log(filterTask);
-// });
+// console.log(getTheObjectParsed)
