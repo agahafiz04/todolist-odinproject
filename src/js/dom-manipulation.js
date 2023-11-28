@@ -113,6 +113,8 @@ export const domManipulation = (function () {
 
         categories.classList.add("currently-selected");
         resetCategoriesEvent();
+
+        setItemDatabase();
       });
     });
   }
@@ -135,6 +137,8 @@ export const domManipulation = (function () {
 
         project.classList.add("currently-selected");
         resetMainEvent();
+
+        setItemDatabase();
       });
     });
   }
@@ -164,6 +168,7 @@ export const domManipulation = (function () {
     );
     addProjectButton.addEventListener("click", () => {
       domDisplay.openModal("project-modal-add");
+      setItemDatabase();
     });
   }
 
@@ -176,6 +181,7 @@ export const domManipulation = (function () {
         pubSubConnection.currentSideId =
           editButton.parentElement.parentElement.id;
         domDisplay.openModal("project-modal-edit");
+        setItemDatabase();
       });
     });
   }
@@ -190,6 +196,7 @@ export const domManipulation = (function () {
         pubSubConnection.currentSideId =
           deleteButton.parentElement.parentElement.id;
         domDisplay.openModal("project-modal-delete");
+        setItemDatabase();
       });
     });
   }
@@ -201,6 +208,7 @@ export const domManipulation = (function () {
 
     addTaskButton.addEventListener("click", () => {
       domDisplay.openModal("task-modal-add");
+      setItemDatabase();
     });
   }
 
@@ -215,6 +223,7 @@ export const domManipulation = (function () {
         pubSubConnection.currentTaskId =
           editButton.parentElement.parentElement.id;
         domDisplay.openModal("task-modal-edit");
+        setItemDatabase();
       });
     });
   }
@@ -230,6 +239,7 @@ export const domManipulation = (function () {
         pubSubConnection.currentTaskId =
           deleteButton.parentElement.parentElement.id;
         domDisplay.openModal("task-modal-delete");
+        setItemDatabase();
       });
     });
   }
@@ -244,6 +254,7 @@ export const domManipulation = (function () {
         pubSubConnection.currentTaskId =
           detailButton.parentElement.parentElement.id;
         domDisplay.openModal("task-modal-detail");
+        setItemDatabase();
       });
     });
   }
@@ -266,6 +277,8 @@ export const domManipulation = (function () {
             pubSubConnection.currentSideId = project.projectId;
           }
         });
+
+        setItemDatabase();
       });
     });
 
@@ -294,6 +307,7 @@ export const domManipulation = (function () {
     allCancelButtonEl.forEach((cancelButton) => {
       cancelButton.addEventListener("click", () => {
         domDisplay.closeModal();
+        setItemDatabase();
       });
     });
 
@@ -303,6 +317,7 @@ export const domManipulation = (function () {
     );
     invalidModalButton.addEventListener("click", () => {
       domDisplay.closeModalInvalid();
+      setItemDatabase();
     });
 
     // Overlay (the blue behind the modal) click for closing the modal
@@ -312,6 +327,7 @@ export const domManipulation = (function () {
       } else {
         domDisplay.closeModal();
       }
+      setItemDatabase();
     });
 
     // Close modal with "ESC" button from keyboard
@@ -347,6 +363,7 @@ export const domManipulation = (function () {
     // Add button event for "Project Modal Add"
     addButton.addEventListener("click", () => {
       checkInput();
+      setItemDatabase();
     });
 
     const checkIfProjectNameExist = function () {
@@ -411,6 +428,7 @@ export const domManipulation = (function () {
     // Edit button event for "Project Modal Edit"
     editButton.addEventListener("click", () => {
       checkInput();
+      setItemDatabase();
     });
 
     const checkInput = function () {
@@ -473,6 +491,7 @@ export const domManipulation = (function () {
 
     deleteButton.addEventListener("click", () => {
       deleted();
+      setItemDatabase();
     });
 
     const deleted = function () {
@@ -514,6 +533,7 @@ export const domManipulation = (function () {
 
     addButton.addEventListener("click", () => {
       check();
+      setItemDatabase();
     });
 
     const check = function () {
@@ -576,6 +596,7 @@ export const domManipulation = (function () {
 
     editButton.addEventListener("click", () => {
       check();
+      setItemDatabase();
     });
 
     const check = function () {
@@ -658,6 +679,7 @@ export const domManipulation = (function () {
 
     deleteButton.addEventListener("click", () => {
       deleted();
+      setItemDatabase();
     });
 
     const deleted = function () {
@@ -703,6 +725,12 @@ export const domManipulation = (function () {
     toggleTaskDetailModal();
     toggleTaskEditModal();
     toggleTaskDeleteModal();
+  }
+
+  function setItemDatabase() {
+    const projectJSON = JSON.stringify(project.projectList);
+    localStorage.setItem("item", projectJSON);
+    console.log(projectJSON);
   }
 
   // Specific event for categories list (Bugged hard to fix)}

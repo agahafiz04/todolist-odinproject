@@ -516,10 +516,6 @@ export const domDisplay = (function () {
     modalEl.forEach((modal) => {
       modal.classList.add("hidden");
     });
-
-    const projectJSON = JSON.stringify(project.projectList);
-    localStorage.setItem("item", projectJSON);
-    console.log(projectJSON);
   }
 
   function invalidModal(text) {
