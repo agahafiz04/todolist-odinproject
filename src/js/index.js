@@ -4,6 +4,8 @@ import { task } from "./task";
 import { domDisplay } from "./dom-display";
 import { domManipulation } from "./dom-manipulation";
 
+console.log(project.projectList);
+
 export let pubSubConnection = {
   currentSideId: "null",
   currentContent: "null",
